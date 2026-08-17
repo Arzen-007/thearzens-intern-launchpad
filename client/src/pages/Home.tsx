@@ -1,36 +1,43 @@
 /**
  * Signal Atlas design reminder: editorial information design, paper-white space, deep-ink type,
- * and signal-lime only for verified routes and clear actions. Avoid dashboard clutter or neon styling.
+ * a persistent atlas spine, and signal-lime only for verified routes and clear actions. Avoid dashboard clutter or neon styling.
  */
 import { Fragment, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDownRight,
   ArrowUpRight,
+  BookOpen,
   Check,
   CircleAlert,
   Cloud,
   Code2,
+  Crosshair,
   Database,
   ExternalLink,
+  GraduationCap,
   Github,
   Globe2,
   Menu,
   Network,
+  Radar,
   Search,
   Server,
   ShieldCheck,
   Sparkles,
+  Wrench,
   X,
 } from "lucide-react";
+import { expandedResources, type ExpandedCategory } from "@/data/atlasCatalog";
 
-type Category =
+type CoreCategory =
   | "Servers"
   | "Frontend"
   | "Backend"
   | "Databases"
   | "Domains"
   | "AI Agents";
+type Category = CoreCategory | ExpandedCategory;
 
 type Resource = {
   name: string;
@@ -41,9 +48,11 @@ type Resource = {
   note: string;
   url: string;
   recommendation?: boolean;
+  audience?: "Developer" | "Cyber student" | "CTF organizer" | "Student" | "Everyone";
+  level?: "Start" | "Build" | "Practice" | "Operate";
 };
 
-const resources: Resource[] = [
+const coreResources: Resource[] = [
   {
     name: "Oracle Cloud",
     category: "Servers",
@@ -377,14 +386,17 @@ const resources: Resource[] = [
   },
 ];
 
+const resources: Resource[] = [...coreResources, ...expandedResources];
+
 const nav = [
   { label: "Start here", target: "top", number: "00" },
-  { label: "Servers", target: "servers", number: "01" },
-  { label: "Build & deploy", target: "build", number: "02" },
-  { label: "Data layer", target: "data", number: "03" },
-  { label: "Domains", target: "domains", number: "04" },
-  { label: "AI agents", target: "agents", number: "05" },
-  { label: "CTF stack", target: "ctf", number: "06" },
+  { label: "Build & ship", target: "build", number: "01" },
+  { label: "Learn core", target: "learning", number: "02" },
+  { label: "Cyber labs", target: "cyber-labs", number: "03" },
+  { label: "Tools & packs", target: "toolkit", number: "04" },
+  { label: "Defend", target: "defense", number: "05" },
+  { label: "AI agents", target: "agents", number: "06" },
+  { label: "CTF ops", target: "ctf", number: "07" },
 ];
 
 const categoryIcons: Record<Category, typeof Server> = {
@@ -394,6 +406,12 @@ const categoryIcons: Record<Category, typeof Server> = {
   Databases: Database,
   Domains: Cloud,
   "AI Agents": Sparkles,
+  Learning: BookOpen,
+  "Cyber Labs": Crosshair,
+  "Dev Tools": Wrench,
+  "Student Packs": GraduationCap,
+  "Defense & OSINT": Radar,
+  "CTF Operations": ShieldCheck,
 };
 
 const categoryNarrative: Record<Category, { eyebrow: string; title: string; copy: string }> = {
@@ -427,6 +445,36 @@ const categoryNarrative: Record<Category, { eyebrow: string; title: string; copy
     title: "Web AIs that can take more than one step.",
     copy: "The list separates real coding/agent workspaces from normal web-model interfaces. Free access can mean daily tasks, limited credits, or a no-cost account—not unlimited sandbox time.",
   },
+  Learning: {
+    eyebrow: "03 / Learn the craft",
+    title: "Build a base before chasing every tool.",
+    copy: "These routes turn curiosity into practical skill: programming foundations, role maps, documentation, cloud learning, and data practice. Pick one path and finish a project.",
+  },
+  "Cyber Labs": {
+    eyebrow: "04 / Authorized practice",
+    title: "Break only what was built to be broken.",
+    copy: "Every route here is a lab, challenge platform, or intentionally vulnerable training application. It is for authorized study—not scanning or testing random systems.",
+  },
+  "Dev Tools": {
+    eyebrow: "05 / Build kit",
+    title: "Your work needs a home, not just a tutorial.",
+    copy: "Use these tools to code, version, test APIs, package containers, and publish visible work. Treat every project like a small professional delivery.",
+  },
+  "Student Packs": {
+    eyebrow: "05A / Student advantages",
+    title: "Verify once. Unlock more room to learn.",
+    copy: "Student programs can open useful software, credits, and partner offers. Eligibility, country support, and terms vary by provider, so always check the current page.",
+  },
+  "Defense & OSINT": {
+    eyebrow: "06 / Defend & investigate",
+    title: "Learn to see systems from the defender’s side.",
+    copy: "Build secure habits, understand attacker behavior at a high level, inspect your own traffic, and work from public defensive frameworks—not from unsafe shortcuts.",
+  },
+  "CTF Operations": {
+    eyebrow: "08 / CTF operations",
+    title: "Make the event reliable before making it difficult.",
+    copy: "A great CTF needs an event layer, backup plan, clear rules, and isolated infrastructure. Use an open platform, then give vulnerable challenges their own restricted environment.",
+  },
 };
 
 function scrollToId(id: string) {
@@ -453,6 +501,7 @@ function ResourceCard({ resource, index }: { resource: Resource; index: number }
         <p className="resource-card__tag">{resource.tag}</p>
         <h3>{resource.name}</h3>
         <p className="resource-card__summary">{resource.summary}</p>
+        {(resource.audience || resource.level) && <div className="resource-card__metadata"><span>{resource.audience ?? "Everyone"}</span><i /> <span>{resource.level ?? "Build"}</span></div>}
         <p className="resource-card__note"><CircleAlert size={14} /> {resource.note}</p>
       </div>
       <a className="resource-card__link" href={resource.url} target="_blank" rel="noreferrer" aria-label={`Open ${resource.name} official website`}>
@@ -509,6 +558,7 @@ function CategorySection({ category, id, search }: { category: Category; id: str
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | "All">("All");
+  const [activeAudience, setActiveAudience] = useState<Resource["audience"] | "All audiences">("All audiences");
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -517,12 +567,14 @@ export default function Home() {
     const query = search.trim().toLowerCase();
     return resources.filter((resource) => {
       const categoryMatch = activeCategory === "All" || resource.category === activeCategory;
+      const audienceMatch = activeAudience === "All audiences" || resource.audience === activeAudience || resource.audience === "Everyone";
       const textMatch = `${resource.name} ${resource.category} ${resource.tag} ${resource.summary}`.toLowerCase().includes(query);
-      return categoryMatch && textMatch;
+      return categoryMatch && audienceMatch && textMatch;
     });
-  }, [activeCategory, search]);
+  }, [activeAudience, activeCategory, search]);
 
-  const categories: (Category | "All")[] = ["All", "Servers", "Frontend", "Backend", "Databases", "Domains", "AI Agents"];
+  const categories: (Category | "All")[] = ["All", "Servers", "Frontend", "Backend", "Databases", "Domains", "Learning", "Cyber Labs", "Dev Tools", "Student Packs", "Defense & OSINT", "AI Agents", "CTF Operations"];
+  const audiences: (Resource["audience"] | "All audiences")[] = ["All audiences", "Developer", "Cyber student", "CTF organizer", "Student"];
 
   const handleCopyStack = async () => {
     const stack = "CTF starter stack: Oracle Cloud Always Free (CTFd control plane) + Cloudflare Pages (public frontend) + Cloudflare DNS/TLS + separate isolated challenge runners + backups in Oracle Object Storage or Cloudflare R2.";
@@ -585,16 +637,16 @@ export default function Home() {
               <span className="verification-stamp"><Check size={13} /> Link-first research</span>
               <span className="pakistan-chip">PK / field notes</span>
             </div>
-            <h1 id="hero-title">Find the free layer<br /><em>that actually runs</em><br />your project.</h1>
-            <p className="hero__intro">A living directory of free cloud servers, hosting, databases, domains, CTF infrastructure, and web AI agents. No guesswork—every route opens the official page.</p>
+            <h1 id="hero-title">Build. Learn. Defend.<br /><em>Start with the</em><br />right free route.</h1>
+            <p className="hero__intro">A practical field guide for developers, cybersecurity students, CTF organizers, and anyone building a technical career from Pakistan. Every route opens the official page.</p>
             <div className="hero__actions">
               <Button onClick={() => scrollToId("servers")} className="signal-button">Explore the routes <ArrowDownRight size={18} /></Button>
               <button onClick={() => scrollToId("agents")} className="text-button">Browse AI agents <ArrowDownRight size={17} /></button>
             </div>
             <div className="hero__stats" aria-label="Website highlights">
-              <div><strong>37</strong><span>direct official routes</span></div>
-              <div><strong>06</strong><span>infrastructure layers</span></div>
-              <div><strong>01</strong><span>CTF-ready starting stack</span></div>
+              <div><strong>76</strong><span>direct official routes</span></div>
+              <div><strong>12</strong><span>practical field maps</span></div>
+              <div><strong>04</strong><span>career starting points</span></div>
             </div>
             <div className="hero__field-note"><span className="hero__field-note-pin" /><p><b>Pakistan check:</b> card verification, country support, regional capacity, and inactivity rules can decide whether a “free” route works for you.</p></div>
           </div>
@@ -619,6 +671,20 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="journey-board section-anchor" id="journeys" aria-labelledby="journey-title">
+          <div className="journey-board__lead">
+            <p className="eyebrow">Pick your first mission</p>
+            <h2 id="journey-title">Don’t browse the whole atlas.<br /><em>Choose a route.</em></h2>
+            <p>Use one starting point, build evidence of work, then return for the next layer.</p>
+          </div>
+          <div className="journey-board__grid">
+            <button onClick={() => scrollToId("build")}><span>01</span><Code2 size={20} /><b>I want to build apps</b><small>Code → deploy → database → domain</small><ArrowDownRight size={18} /></button>
+            <button onClick={() => scrollToId("cyber-labs")}><span>02</span><Crosshair size={20} /><b>I want to learn cybersecurity</b><small>Foundations → authorized labs → defense</small><ArrowDownRight size={18} /></button>
+            <button onClick={() => scrollToId("toolkit")}><span>03</span><GraduationCap size={20} /><b>I have student status</b><small>Verify → unlock software → build portfolio</small><ArrowDownRight size={18} /></button>
+            <button onClick={() => scrollToId("ctf")}><span>04</span><ShieldCheck size={20} /><b>I want to run a CTF</b><small>Scoreboard → isolate runners → backup</small><ArrowDownRight size={18} /></button>
+          </div>
+        </section>
+
         <section className="finder section-anchor" id="finder" aria-labelledby="finder-title">
           <div className="finder__head">
             <div><p className="eyebrow">Route finder</p><h2 id="finder-title">Start with the job,<br />not the provider.</h2></div>
@@ -628,6 +694,10 @@ export default function Home() {
             {categories.map((category) => (
               <button className={`filter-chip ${activeCategory === category ? "is-active" : ""}`} key={category} onClick={() => setActiveCategory(category)} role="tab" aria-selected={activeCategory === category}>{category}</button>
             ))}
+          </div>
+          <div className="audience-row" role="tablist" aria-label="Filter resources by audience">
+            <span>For:</span>
+            {audiences.map((audience) => <button className={`audience-chip ${activeAudience === audience ? "is-active" : ""}`} key={audience} onClick={() => setActiveAudience(audience)} role="tab" aria-selected={activeAudience === audience}>{audience}</button>)}
           </div>
           <div className="finder__results">
             <div className="finder__result-label"><span className="signal-line" /> <p><b>{visibleResources.length}</b> routes match your filter</p></div>
@@ -657,6 +727,16 @@ export default function Home() {
         <CategorySection category="Backend" id="backend" search={search} />
         <CategorySection category="Databases" id="data" search={search} />
         <CategorySection category="Domains" id="domains" search={search} />
+        <CategorySection category="Learning" id="learning" search={search} />
+        <CategorySection category="Cyber Labs" id="cyber-labs" search={search} />
+
+        <section className="toolkit-break section-anchor" id="toolkit" aria-labelledby="toolkit-title">
+          <div><p className="eyebrow">05 / Ship proof of work</p><h2 id="toolkit-title">The useful tool is the one<br /><em>you actually use in public.</em></h2><p>Version your projects. Write a short README. Publish a demo or a learning log. Then claim a student benefit only when it supports the work you already do.</p></div>
+          <div className="toolkit-break__legend"><span><i /> Build with tools</span><span><i /> Verify student status</span><span><i /> Keep your work portable</span></div>
+        </section>
+        <CategorySection category="Dev Tools" id="dev-tools" search={search} />
+        <CategorySection category="Student Packs" id="student-packs" search={search} />
+        <CategorySection category="Defense & OSINT" id="defense" search={search} />
 
         <section id="agents" className="agents-panel section-anchor" aria-labelledby="agent-title">
           <div className="agents-panel__header">
@@ -695,6 +775,7 @@ export default function Home() {
           </div>
           <div className="ctf-zone__visual"><img src="/manus-storage/ctf-isolation-atlas_b5d8d92a.png" alt="Abstract isolated CTF infrastructure illustration" /></div>
         </section>
+        <CategorySection category="CTF Operations" id="ctf-operations" search={search} />
 
         <section className="promise-strip">
           <div className="promise-strip__mark"><img src="/manus-storage/signal-atlas-route-logo_83045ac8.png" alt="" /></div>
