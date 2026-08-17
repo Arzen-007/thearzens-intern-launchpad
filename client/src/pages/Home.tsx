@@ -3,7 +3,7 @@
  * surfaces, electric cyan as the primary signal, sharp technical borders, terminal microcopy, and
  * real supplied brand marks. Red is for CTF / offensive-security context; purple is for AI / research.
  */
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDownRight,
@@ -30,6 +30,7 @@ import {
   X,
 } from "lucide-react";
 import { expandedResources, type ExpandedCategory } from "@/data/atlasCatalog";
+import { projectStacks, shipResources, type ShipCategory, type ShipResource } from "@/data/shipFreeCatalog";
 
 type CoreCategory =
   | "Servers"
@@ -391,13 +392,14 @@ const resources: Resource[] = [...coreResources, ...expandedResources];
 
 const nav = [
   { label: "Initialize", target: "top", number: "00" },
-  { label: "Build systems", target: "build", number: "01" },
-  { label: "Skill path", target: "learning", number: "02" },
-  { label: "Cyber lab", target: "cyber-labs", number: "03" },
-  { label: "Tool arsenal", target: "toolkit", number: "04" },
-  { label: "Defense ops", target: "defense", number: "05" },
-  { label: "AI research", target: "agents", number: "06" },
-  { label: "CTF control", target: "ctf", number: "07" },
+  { label: "Deploy free", target: "deploy-free", number: "01" },
+  { label: "Build systems", target: "build", number: "02" },
+  { label: "Skill path", target: "learning", number: "03" },
+  { label: "Cyber lab", target: "cyber-labs", number: "04" },
+  { label: "Tool arsenal", target: "toolkit", number: "05" },
+  { label: "Defense ops", target: "defense", number: "06" },
+  { label: "AI research", target: "agents", number: "07" },
+  { label: "CTF control", target: "ctf", number: "08" },
 ];
 
 const categoryIcons: Record<Category, typeof Server> = {
@@ -513,6 +515,35 @@ function ResourceCard({ resource, index }: { resource: Resource; index: number }
   );
 }
 
+const shipCategoryIcons: Record<ShipCategory, typeof Server> = {
+  "Static & frontend": Globe2,
+  "Backend & API": Network,
+  "Full-stack & data": Database,
+  "Servers & compute": Server,
+  "Domains & identity": Cloud,
+  "Free AI": Sparkles,
+};
+
+function ShipResourceCard({ resource, index }: { resource: ShipResource; index: number }) {
+  const Icon = shipCategoryIcons[resource.category];
+  return (
+    <article className={`resource-card ship-resource-card ${resource.recommendation ? "resource-card--featured" : ""}`} style={{ "--card-index": index } as React.CSSProperties}>
+      <div className="resource-card__topline">
+        <div className="resource-card__identity"><span className="icon-box"><Icon size={16} strokeWidth={1.8} /></span><span>{resource.category}</span></div>
+        <FreeType value={resource.freeType} />
+      </div>
+      <div className="resource-card__content">
+        <p className="resource-card__tag">{resource.tag}</p>
+        <h3>{resource.name}</h3>
+        <p className="resource-card__summary">{resource.summary}</p>
+        {(resource.audience || resource.level) && <div className="resource-card__metadata"><span>{resource.audience ?? "Everyone"}</span><i /> <span>{resource.level ?? "Build"}</span></div>}
+        <p className="resource-card__note"><CircleAlert size={14} /> {resource.note}</p>
+      </div>
+      <a className="resource-card__link" href={resource.url} target="_blank" rel="noreferrer" aria-label={`Open ${resource.name} official website`}><span>Open official route</span><ArrowUpRight size={18} /></a>
+    </article>
+  );
+}
+
 function CategorySection({ category, id, search }: { category: Category; id: string; search: string }) {
   const content = categoryNarrative[category];
   const gridClass = category.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-");
@@ -569,6 +600,8 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | "All">("All");
   const [activeAudience, setActiveAudience] = useState<Resource["audience"] | "All audiences">("All audiences");
   const [search, setSearch] = useState("");
+  const [shipCategory, setShipCategory] = useState<ShipCategory | "All deployment routes">("All deployment routes");
+  const [activeRoute, setActiveRoute] = useState("top");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -584,6 +617,18 @@ export default function Home() {
 
   const categories: (Category | "All")[] = ["All", "Servers", "Frontend", "Backend", "Databases", "Domains", "Learning", "Cyber Labs", "Dev Tools", "Student Packs", "Defense & OSINT", "AI Agents", "CTF Operations"];
   const audiences: (Resource["audience"] | "All audiences")[] = ["All audiences", "Developer", "Cyber student", "CTF organizer", "Student"];
+  const shipCategories: (ShipCategory | "All deployment routes")[] = ["All deployment routes", "Static & frontend", "Backend & API", "Full-stack & data", "Servers & compute", "Domains & identity", "Free AI"];
+  const visibleShipResources = shipResources.filter((resource) => shipCategory === "All deployment routes" || resource.category === shipCategory);
+
+  useEffect(() => {
+    const sections = nav.map((item) => document.getElementById(item.target)).filter((section): section is HTMLElement => Boolean(section));
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (visible?.target.id) setActiveRoute(visible.target.id);
+    }, { rootMargin: "-18% 0px -65% 0px", threshold: 0 });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   const handleCopyStack = async () => {
     const stack = "CTF starter stack: Oracle Cloud Always Free (CTFd control plane) + Cloudflare Pages (public frontend) + Cloudflare DNS/TLS + separate isolated challenge runners + backups in Oracle Object Storage or Cloudflare R2.";
@@ -600,7 +645,7 @@ export default function Home() {
     <div className="atlas-page" id="top">
       <aside className="atlas-rail" aria-label="Section navigation">
         <div className="rail-brand">
-          <button className="brand-mark" onClick={() => scrollToId("top")} aria-label="Return to the top of THE ARZENS Intern Launchpad">
+          <button className="brand-mark" onClick={() => { setActiveRoute("top"); scrollToId("top"); }} aria-label="Return to the top of THE ARZENS Intern Launchpad">
             <img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS logo" />
           </button>
           <span><b>THE</b><i>/</i>ARZENS</span>
@@ -608,7 +653,7 @@ export default function Home() {
         <div className="rail-caption">Intern command<br />launchpad</div>
         <nav className="rail-nav">
           {nav.map((item) => (
-            <button key={item.target} onClick={() => scrollToId(item.target)}>
+            <button className={activeRoute === item.target ? "is-active" : ""} key={item.target} onClick={() => { setActiveRoute(item.target); scrollToId(item.target); }} aria-current={activeRoute === item.target ? "location" : undefined}>
               <span>{item.number}</span>{item.label}
             </button>
           ))}
@@ -620,7 +665,7 @@ export default function Home() {
       </aside>
 
       <header className="mobile-header">
-        <button className="brand-mark brand-mark--mobile" onClick={() => scrollToId("top")} aria-label="Return to top">
+        <button className="brand-mark brand-mark--mobile" onClick={() => { setActiveRoute("top"); scrollToId("top"); }} aria-label="Return to top">
           <img src="/manus-storage/thearzens-blue_839fa124.png" alt="" />
         </button>
         <p>THE ARZENS</p>
@@ -630,7 +675,7 @@ export default function Home() {
         {menuOpen && (
           <nav className="mobile-menu">
             {nav.map((item) => (
-              <button key={item.target} onClick={() => { scrollToId(item.target); setMenuOpen(false); }}>
+              <button className={activeRoute === item.target ? "is-active" : ""} key={item.target} onClick={() => { setActiveRoute(item.target); scrollToId(item.target); setMenuOpen(false); }} aria-current={activeRoute === item.target ? "location" : undefined}>
                 <span>{item.number}</span>{item.label}
               </button>
             ))}
@@ -646,14 +691,14 @@ export default function Home() {
               <span className="verification-stamp"><Check size={13} /> Official routes only</span>
               <span className="pakistan-chip">PK / Global access</span>
             </div>
-            <h1 id="hero-title">THE SYSTEM<br />IS <em>WAKING.</em></h1>
-            <p className="hero__intro">Your operational base for free infrastructure, ethical cyber practice, AI workflows, and project-ready stacks. Built for THE ARZENS interns who need to learn fast and ship work that proves it.</p>
+            <h1 id="hero-title"><span className="hero__brand">THE ARZENS</span><br />INTERN <em>LAUNCHPAD.</em></h1>
+            <p className="hero__intro">Verified free infrastructure, safe cyber labs, AI workflows, and project stacks for THE ARZENS interns. Open a route, check its limits, then ship work that proves what you can build.</p>
             <div className="hero__actions">
-              <Button onClick={() => scrollToId("journeys")} className="signal-button">Initialize protocol <ArrowDownRight size={18} /></Button>
+              <Button onClick={() => scrollToId("deploy-free")} className="signal-button">Deploy a project <ArrowDownRight size={18} /></Button>
               <button onClick={() => scrollToId("finder")} className="text-button">Open resource grid <ArrowDownRight size={17} /></button>
             </div>
             <div className="hero__stats" aria-label="Website highlights">
-              <div><strong>{resources.length}</strong><span>official routes</span></div>
+              <div><strong>{resources.length + shipResources.length}</strong><span>official routes</span></div>
               <div><strong>04</strong><span>intern mission paths</span></div>
               <div><strong>00</strong><span>paid tools required</span></div>
             </div>
@@ -664,7 +709,7 @@ export default function Home() {
             <img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS cyan logo" />
             <div className="hero__route-card">
               <span className="hero__route-dot" />
-              <div><b>INITIAL ROUTE READY</b><p>Build → Practice → Deploy</p></div>
+              <div><b>INTERN LAUNCH ROUTE READY</b><p>Verify → build → deploy</p></div>
               <ArrowUpRight size={17} />
             </div>
             <div className="hero__map-scale" aria-hidden="true"><span>SYS: ARZ-01</span><i /><span>STATUS: ONLINE</span></div>
@@ -688,10 +733,49 @@ export default function Home() {
             <p>Start where your project or career needs you. Each path routes you to an ethical, practical set of no-cost tools and learning environments.</p>
           </div>
           <div className="journey-board__grid">
-            <button onClick={() => scrollToId("build")}><span>01 / BUILD</span><Code2 size={20} /><b>Ship a live project</b><small>Code → deploy → database → domain</small><ArrowDownRight size={18} /></button>
+            <button onClick={() => scrollToId("deploy-free")}><span>01 / DEPLOY</span><Code2 size={20} /><b>Ship a live project</b><small>Code → deploy → database → domain</small><ArrowDownRight size={18} /></button>
             <button className="journey-card--red" onClick={() => scrollToId("cyber-labs")}><span>02 / TRAIN</span><Crosshair size={20} /><b>Learn cybersecurity</b><small>Foundations → authorized labs → defense</small><img src="/manus-storage/thearzens-red_a8031da9.png" alt="" /><ArrowDownRight size={18} /></button>
             <button onClick={() => scrollToId("toolkit")}><span>03 / UNLOCK</span><GraduationCap size={20} /><b>Use student access</b><small>Verify → unlock software → build portfolio</small><ArrowDownRight size={18} /></button>
             <button className="journey-card--purple" onClick={() => scrollToId("agents")}><span>04 / RESEARCH</span><Sparkles size={20} /><b>Build with AI agents</b><small>Research → code → test → document</small><img src="/manus-storage/thearzens-purple_ce9a6f94.png" alt="" /><ArrowDownRight size={18} /></button>
+          </div>
+        </section>
+
+        <section className="ship-free section-anchor" id="deploy-free" aria-labelledby="ship-free-title">
+          <div className="ship-free__header">
+            <div className="ship-free__marker"><span>01</span><p>SHIP YOUR<br />PROJECT FREE</p></div>
+            <div>
+              <p className="eyebrow">THE ARZENS / DEPLOYMENT CONTROL</p>
+              <h2 id="ship-free-title">Your project deserves<br /><em>a public URL.</em></h2>
+              <p>Start from what you are building, not from a random provider. These are practical free-entry routes for a website, frontend, API, database-backed app, Linux server, domain identity, or AI-assisted build sprint.</p>
+            </div>
+            <aside className="ship-free__warning"><CircleAlert size={18} /><p><b>Deployment truth:</b> “Free” can mean a monthly quota, temporary credits, a sleeping app, a subdomain, or account verification. Keep code in Git, keep secrets out of the frontend, and document a fallback route.</p></aside>
+          </div>
+
+          <div className="ship-free__stack-board" aria-label="Project starter stacks">
+            {projectStacks.map((stack) => (
+              <article className="ship-stack" key={stack.code}>
+                <div className="ship-stack__code"><span>{stack.code}</span><i /></div>
+                <h3>{stack.title}</h3>
+                <p>{stack.description}</p>
+                <div className="ship-stack__route"><span>Recommended start</span><b>{stack.route}</b></div>
+                <small>{stack.note}</small>
+                <div className="ship-stack__actions">
+                  <button onClick={() => setShipCategory(stack.category)}>Filter routes <ArrowDownRight size={15} /></button>
+                  <a href={stack.url} target="_blank" rel="noreferrer">Start official route <ArrowUpRight size={15} /></a>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="ship-free__catalog-head">
+            <div><p className="eyebrow">Deployment resource grid</p><p><b>{visibleShipResources.length}</b> official routes for this launch decision</p></div>
+            <a href="https://education.github.com/pack" target="_blank" rel="noreferrer">Check student benefits <ArrowUpRight size={16} /></a>
+          </div>
+          <div className="ship-free__filters" role="tablist" aria-label="Filter deployment resources">
+            {shipCategories.map((category) => <button className={shipCategory === category ? "is-active" : ""} key={category} onClick={() => setShipCategory(category)} role="tab" aria-selected={shipCategory === category}>{category}</button>)}
+          </div>
+          <div className="ship-free__grid">
+            {visibleShipResources.map((resource, index) => <ShipResourceCard resource={resource} index={index} key={resource.name} />)}
           </div>
         </section>
 

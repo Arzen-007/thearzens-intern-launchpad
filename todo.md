@@ -9,7 +9,7 @@
 - [x] Rebuild navigation and discovery around audience, career path, category, and starting task.
 - [x] Implement direct official links, search, filters, saved route concepts, and practical starter stacks.
 - [x] Test representative desktop and mobile screens, all key interactions, and the outbound-link mapping.
-- [ ] Save an updated checkpoint and deliver the comprehensive platform.
+- [x] Save an updated checkpoint and deliver the comprehensive platform.
 
 ## THE ARZENS Rebrand
 
@@ -19,4 +19,15 @@
 - [x] Redesign the landing experience around intern missions, project stacks, learning paths, and cyber practice.
 - [x] Apply THE ARZENS branding throughout the responsive interface and replace Signal Atlas references.
 - [x] Verify desktop/mobile visual fidelity, accessible contrast, and direct-resource navigation.
-- [ ] Save and deliver the completed THE ARZENS intern launchpad.
+- [x] Save and deliver the completed THE ARZENS intern launchpad.
+
+## Ship Your Project Free Expansion
+
+- [x] Define practical student journeys for static sites, frontends, APIs, full-stack apps, databases, domains, servers, and AI-assisted delivery.
+- [x] Verify official options for frontend/static hosting and student-friendly full-stack app deployment.
+- [x] Verify official options for backend/API runtimes, serverless functions, free VMs, databases, domains, and subdomains.
+- [x] Verify free web-based AI tools and agent workspaces that can support project work.
+- [x] Add deployment-specific resource records with direct official links, limits, account requirements, and recommended project type.
+- [x] Build the THE ARZENS Ship Your Project Free discovery flow, project-stack recommendations, and clear setup warnings.
+- [x] Verify all new route actions, free-tier wording, and desktop/mobile rendering.
+- [x] Save and deliver the expanded THE ARZENS deployment hub.
