@@ -1,4 +1,4 @@
-/** Signal Atlas design reminder: preserve the light editorial atlas theme across every route. */
+/** THE ARZENS reminder: preserve the dark operational launchpad theme across every route. */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -20,7 +20,7 @@ function Router() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="light">
+      <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
           <Router />

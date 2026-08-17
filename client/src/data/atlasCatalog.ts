@@ -1,5 +1,5 @@
 /**
- * Signal Atlas catalog model: use official primary URLs, clear free-access labels,
+ * THE ARZENS intern launchpad catalog model: use official primary URLs, clear free-access labels,
  * and limited claims. Every item is a legal learning, building, or authorized-practice route.
  */
 export type ExpandedCategory =

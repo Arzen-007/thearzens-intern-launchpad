@@ -1,6 +1,7 @@
 /**
- * Signal Atlas design reminder: editorial information design, paper-white space, deep-ink type,
- * a persistent atlas spine, and signal-lime only for verified routes and clear actions. Avoid dashboard clutter or neon styling.
+ * THE ARZENS design reminder: a dark operational launchpad for interns. Use high-contrast near-black
+ * surfaces, electric cyan as the primary signal, sharp technical borders, terminal microcopy, and
+ * real supplied brand marks. Red is for CTF / offensive-security context; purple is for AI / research.
  */
 import { Fragment, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -389,14 +390,14 @@ const coreResources: Resource[] = [
 const resources: Resource[] = [...coreResources, ...expandedResources];
 
 const nav = [
-  { label: "Start here", target: "top", number: "00" },
-  { label: "Build & ship", target: "build", number: "01" },
-  { label: "Learn core", target: "learning", number: "02" },
-  { label: "Cyber labs", target: "cyber-labs", number: "03" },
-  { label: "Tools & packs", target: "toolkit", number: "04" },
-  { label: "Defend", target: "defense", number: "05" },
-  { label: "AI agents", target: "agents", number: "06" },
-  { label: "CTF ops", target: "ctf", number: "07" },
+  { label: "Initialize", target: "top", number: "00" },
+  { label: "Build systems", target: "build", number: "01" },
+  { label: "Skill path", target: "learning", number: "02" },
+  { label: "Cyber lab", target: "cyber-labs", number: "03" },
+  { label: "Tool arsenal", target: "toolkit", number: "04" },
+  { label: "Defense ops", target: "defense", number: "05" },
+  { label: "AI research", target: "agents", number: "06" },
+  { label: "CTF control", target: "ctf", number: "07" },
 ];
 
 const categoryIcons: Record<Category, typeof Server> = {
@@ -505,7 +506,7 @@ function ResourceCard({ resource, index }: { resource: Resource; index: number }
         <p className="resource-card__note"><CircleAlert size={14} /> {resource.note}</p>
       </div>
       <a className="resource-card__link" href={resource.url} target="_blank" rel="noreferrer" aria-label={`Open ${resource.name} official website`}>
-        <span>Open official site</span>
+        <span>Open official route</span>
         <ArrowUpRight size={18} />
       </a>
     </article>
@@ -514,24 +515,32 @@ function ResourceCard({ resource, index }: { resource: Resource; index: number }
 
 function CategorySection({ category, id, search }: { category: Category; id: string; search: string }) {
   const content = categoryNarrative[category];
-  const gridClass = category.toLowerCase().replace(/\s+/g, "-");
+  const gridClass = category.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-");
   const filtered = resources.filter((resource) => {
     const matchedCategory = resource.category === category;
     const haystack = `${resource.name} ${resource.tag} ${resource.summary} ${resource.note}`.toLowerCase();
     return matchedCategory && haystack.includes(search.toLowerCase());
   });
+  const lead = filtered.find((resource) => resource.recommendation) ?? filtered[0];
 
   return (
-    <section id={id} className="atlas-section section-anchor">
+    <section id={id} className={`atlas-section section-anchor route-${gridClass}`}>
       <div className="section-heading">
         <div className="section-route" aria-hidden="true">
           <span className="section-route__number">{content.eyebrow.split(" /")[0]}</span>
           <i />
-          <small>Mapped<br />route</small>
+          <small>System<br />route</small>
         </div>
         <p className="eyebrow">{content.eyebrow}</p>
         <h2>{content.title}</h2>
         <p>{content.copy}</p>
+        {lead && (
+          <div className="route-checkpoint">
+            <span>Lead route</span>
+            <b>{lead.name}</b>
+            <p>{lead.tag}</p>
+          </div>
+        )}
       </div>
       <div className={`resource-grid resource-grid--${gridClass}`}>
         {filtered.length > 0 ? (
@@ -541,9 +550,9 @@ function CategorySection({ category, id, search }: { category: Category; id: str
               {index === 1 && filtered.length > 2 && (
                 <aside className="route-annotation">
                   <span className="route-annotation__line" />
-                  <p className="route-annotation__kicker">Field note</p>
-                  <b>{category === "Servers" ? "Capacity can be the real limit." : category === "Databases" ? "Export early. Stay portable." : "Choose the smallest working layer."}</b>
-                  <p>{category === "Servers" ? "A genuine always-free VM is rare. Use accurate account details, then check live capacity before designing around it." : category === "Domains" ? "A free subdomain can be a good start, but it is not the same as owning a registrar domain." : "Keep a fallback route ready when a provider changes a quota, credits, or inactivity rule."}</p>
+                  <p className="route-annotation__kicker">Checkpoint / operator note</p>
+                  <b>{category === "Servers" ? "Verify capacity before you design around it." : category === "Databases" ? "Export early. Keep your project movable." : "Choose the smallest layer that completes the mission."}</b>
+                  <p>{category === "Servers" ? "A genuine always-free VM is rare. Use accurate account details, confirm live capacity, and retain a second route before you commit your project." : category === "Domains" ? "A free subdomain is an effective launch tool, but it is not the same as owning a registrar domain." : "Document a fallback before a quota, credit pool, or inactivity rule interrupts a working project."}</p>
                 </aside>
               )}
             </Fragment>
@@ -591,12 +600,12 @@ export default function Home() {
     <div className="atlas-page" id="top">
       <aside className="atlas-rail" aria-label="Section navigation">
         <div className="rail-brand">
-          <button className="brand-mark" onClick={() => scrollToId("top")} aria-label="Return to the top of Signal Atlas">
-            <img src="/manus-storage/signal-atlas-route-logo_83045ac8.png" alt="Signal Atlas route marker" />
+          <button className="brand-mark" onClick={() => scrollToId("top")} aria-label="Return to the top of THE ARZENS Intern Launchpad">
+            <img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS logo" />
           </button>
-          <span><b>SIGNAL</b><i>/</i>ATLAS</span>
+          <span><b>THE</b><i>/</i>ARZENS</span>
         </div>
-        <div className="rail-caption">Free infrastructure<br />field guide</div>
+        <div className="rail-caption">Intern command<br />launchpad</div>
         <nav className="rail-nav">
           {nav.map((item) => (
             <button key={item.target} onClick={() => scrollToId(item.target)}>
@@ -606,15 +615,15 @@ export default function Home() {
         </nav>
         <div className="rail-foot">
           <span className="pulse-dot" />
-          <span>Research set<br />Aug ’26</span>
+          <span>Intern resource grid<br />Verified routes</span>
         </div>
       </aside>
 
       <header className="mobile-header">
         <button className="brand-mark brand-mark--mobile" onClick={() => scrollToId("top")} aria-label="Return to top">
-          <img src="/manus-storage/signal-atlas-route-logo_83045ac8.png" alt="" />
+          <img src="/manus-storage/thearzens-blue_839fa124.png" alt="" />
         </button>
-        <p>Signal Atlas</p>
+        <p>THE ARZENS</p>
         <button className="menu-button" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label="Toggle navigation menu">
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -633,36 +642,37 @@ export default function Home() {
         <section className="hero section-anchor" aria-labelledby="hero-title">
           <div className="hero__copy">
             <div className="hero__micro-row">
-              <span className="eyebrow">A field guide for Pakistani builders</span>
-              <span className="verification-stamp"><Check size={13} /> Link-first research</span>
-              <span className="pakistan-chip">PK / field notes</span>
+              <span className="eyebrow">THE ARZENS // INTERN OPERATIONS</span>
+              <span className="verification-stamp"><Check size={13} /> Official routes only</span>
+              <span className="pakistan-chip">PK / Global access</span>
             </div>
-            <h1 id="hero-title">Build. Learn. Defend.<br /><em>Start with the</em><br />right free route.</h1>
-            <p className="hero__intro">A practical field guide for developers, cybersecurity students, CTF organizers, and anyone building a technical career from Pakistan. Every route opens the official page.</p>
+            <h1 id="hero-title">THE SYSTEM<br />IS <em>WAKING.</em></h1>
+            <p className="hero__intro">Your operational base for free infrastructure, ethical cyber practice, AI workflows, and project-ready stacks. Built for THE ARZENS interns who need to learn fast and ship work that proves it.</p>
             <div className="hero__actions">
-              <Button onClick={() => scrollToId("servers")} className="signal-button">Explore the routes <ArrowDownRight size={18} /></Button>
-              <button onClick={() => scrollToId("agents")} className="text-button">Browse AI agents <ArrowDownRight size={17} /></button>
+              <Button onClick={() => scrollToId("journeys")} className="signal-button">Initialize protocol <ArrowDownRight size={18} /></Button>
+              <button onClick={() => scrollToId("finder")} className="text-button">Open resource grid <ArrowDownRight size={17} /></button>
             </div>
             <div className="hero__stats" aria-label="Website highlights">
-              <div><strong>76</strong><span>direct official routes</span></div>
-              <div><strong>12</strong><span>practical field maps</span></div>
-              <div><strong>04</strong><span>career starting points</span></div>
+              <div><strong>{resources.length}</strong><span>official routes</span></div>
+              <div><strong>04</strong><span>intern mission paths</span></div>
+              <div><strong>00</strong><span>paid tools required</span></div>
             </div>
-            <div className="hero__field-note"><span className="hero__field-note-pin" /><p><b>Pakistan check:</b> card verification, country support, regional capacity, and inactivity rules can decide whether a “free” route works for you.</p></div>
+            <div className="hero__field-note"><span className="hero__field-note-pin" /><p><b>Access protocol:</b> country support, verification, capacity, and inactivity limits can decide whether a free route works. Read the operational note before deployment.</p></div>
           </div>
           <div className="hero__visual">
-            <img src="/manus-storage/signal-atlas-hero_951ad4bb.png" alt="Abstract atlas of interconnected infrastructure routes" />
+            <div className="system-grid" aria-hidden="true" />
+            <img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS cyan logo" />
             <div className="hero__route-card">
               <span className="hero__route-dot" />
-              <div><b>START HERE</b><p>Oracle VM → Cloudflare Pages → Neon</p></div>
+              <div><b>INITIAL ROUTE READY</b><p>Build → Practice → Deploy</p></div>
               <ArrowUpRight size={17} />
             </div>
-            <div className="hero__map-scale" aria-hidden="true"><span>33° 40′ N</span><i /><span>73° 02′ E</span></div>
+            <div className="hero__map-scale" aria-hidden="true"><span>SYS: ARZ-01</span><i /><span>STATUS: ONLINE</span></div>
           </div>
         </section>
 
         <section className="truth-strip" aria-label="What free access means">
-          <div className="truth-strip__intro"><p className="eyebrow">Before you click</p><h2>“Free” is not one thing.</h2></div>
+          <div className="truth-strip__intro"><p className="eyebrow">System rules</p><h2>Know what<br />“free” means.</h2></div>
           <div className="truth-strip__items">
             <div><span className="legend-dot legend-dot--lime" /> <b>Always free</b><p>Ongoing quota, not unlimited.</p></div>
             <div><span className="legend-dot legend-dot--ink" /> <b>Free quota</b><p>Usage cap resets each month.</p></div>
@@ -673,22 +683,22 @@ export default function Home() {
 
         <section className="journey-board section-anchor" id="journeys" aria-labelledby="journey-title">
           <div className="journey-board__lead">
-            <p className="eyebrow">Pick your first mission</p>
-            <h2 id="journey-title">Don’t browse the whole atlas.<br /><em>Choose a route.</em></h2>
-            <p>Use one starting point, build evidence of work, then return for the next layer.</p>
+            <p className="eyebrow">Select mission</p>
+            <h2 id="journey-title">One clear mission.<br /><em>One real outcome.</em></h2>
+            <p>Start where your project or career needs you. Each path routes you to an ethical, practical set of no-cost tools and learning environments.</p>
           </div>
           <div className="journey-board__grid">
-            <button onClick={() => scrollToId("build")}><span>01</span><Code2 size={20} /><b>I want to build apps</b><small>Code → deploy → database → domain</small><ArrowDownRight size={18} /></button>
-            <button onClick={() => scrollToId("cyber-labs")}><span>02</span><Crosshair size={20} /><b>I want to learn cybersecurity</b><small>Foundations → authorized labs → defense</small><ArrowDownRight size={18} /></button>
-            <button onClick={() => scrollToId("toolkit")}><span>03</span><GraduationCap size={20} /><b>I have student status</b><small>Verify → unlock software → build portfolio</small><ArrowDownRight size={18} /></button>
-            <button onClick={() => scrollToId("ctf")}><span>04</span><ShieldCheck size={20} /><b>I want to run a CTF</b><small>Scoreboard → isolate runners → backup</small><ArrowDownRight size={18} /></button>
+            <button onClick={() => scrollToId("build")}><span>01 / BUILD</span><Code2 size={20} /><b>Ship a live project</b><small>Code → deploy → database → domain</small><ArrowDownRight size={18} /></button>
+            <button className="journey-card--red" onClick={() => scrollToId("cyber-labs")}><span>02 / TRAIN</span><Crosshair size={20} /><b>Learn cybersecurity</b><small>Foundations → authorized labs → defense</small><img src="/manus-storage/thearzens-red_a8031da9.png" alt="" /><ArrowDownRight size={18} /></button>
+            <button onClick={() => scrollToId("toolkit")}><span>03 / UNLOCK</span><GraduationCap size={20} /><b>Use student access</b><small>Verify → unlock software → build portfolio</small><ArrowDownRight size={18} /></button>
+            <button className="journey-card--purple" onClick={() => scrollToId("agents")}><span>04 / RESEARCH</span><Sparkles size={20} /><b>Build with AI agents</b><small>Research → code → test → document</small><img src="/manus-storage/thearzens-purple_ce9a6f94.png" alt="" /><ArrowDownRight size={18} /></button>
           </div>
         </section>
 
         <section className="finder section-anchor" id="finder" aria-labelledby="finder-title">
           <div className="finder__head">
-            <div><p className="eyebrow">Route finder</p><h2 id="finder-title">Start with the job,<br />not the provider.</h2></div>
-            <div className="search-field"><Search size={18} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search servers, Postgres, agent, CTF…" aria-label="Search free resources" /></div>
+            <div><p className="eyebrow">Resource command</p><h2 id="finder-title">Open the right tool.<br /><em>Complete the task.</em></h2></div>
+            <div className="search-field"><Search size={18} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search servers, cyber labs, agents, CTF…" aria-label="Search free resources" /></div>
           </div>
           <div className="filter-row" role="tablist" aria-label="Filter resources by category">
             {categories.map((category) => (
@@ -741,9 +751,9 @@ export default function Home() {
         <section id="agents" className="agents-panel section-anchor" aria-labelledby="agent-title">
           <div className="agents-panel__header">
             <div>
-              <p className="eyebrow">05 / Free AI agent switchboard</p>
-              <div className="night-map-stamp"><span>05</span><b>Night map<br />inset</b><i /></div>
-              <h2 id="agent-title">Not every chat window<br /><em>is a sandbox agent.</em></h2>
+              <p className="eyebrow">06 / AI RESEARCH GRID</p>
+              <div className="night-map-stamp"><img src="/manus-storage/thearzens-purple_ce9a6f94.png" alt="THE ARZENS purple research mark" /><span>06</span><b>Research<br />node</b><i /></div>
+              <h2 id="agent-title">Not every chat window<br /><em>runs a real task.</em></h2>
             </div>
             <p>These are the strongest free-entry web tools I could verify for multi-step work. Use the labels: some run code in a VM, some build apps inside a browser workspace, and some are simply useful web model interfaces.</p>
           </div>
@@ -760,7 +770,8 @@ export default function Home() {
 
         <section className="ctf-zone section-anchor" id="ctf" aria-labelledby="ctf-title">
           <div className="ctf-zone__copy">
-            <p className="eyebrow">06 / Authorized CTF hosting</p>
+            <p className="eyebrow">07 / AUTHORIZED CTF CONTROL</p>
+            <div className="ctf-brand-mark"><img src="/manus-storage/thearzens-red_a8031da9.png" alt="THE ARZENS red CTF mark" /></div>
             <h2 id="ctf-title">Run the scoreboard.<br /><em>Isolate the challenge.</em></h2>
             <p>For a small authorized CTF, start with a control plane on Oracle Cloud, serve the public experience from Cloudflare Pages, and place intentionally vulnerable challenge containers on a separate isolated runner. Your scoreboard should never share unrestricted host access with a vulnerable web or pwn challenge.</p>
             <div className="ctf-zone__stack">
@@ -778,14 +789,14 @@ export default function Home() {
         <CategorySection category="CTF Operations" id="ctf-operations" search={search} />
 
         <section className="promise-strip">
-          <div className="promise-strip__mark"><img src="/manus-storage/signal-atlas-route-logo_83045ac8.png" alt="" /></div>
-          <div><p className="eyebrow">Build like you expect change</p><h2>Use free tiers for momentum.<br />Keep your data portable.</h2></div>
+          <div className="promise-strip__mark"><img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS logo" /></div>
+          <div><p className="eyebrow">THE ARZENS INTERN PRINCIPLE</p><h2>Train safely. Ship with proof.<br />Keep your work portable.</h2></div>
           <a href="https://github.com/CTFd/CTFd" target="_blank" rel="noreferrer" className="promise-strip__link"><Github size={19} /> Open-source CTFd <ArrowUpRight size={18} /></a>
         </section>
       </main>
 
       <footer className="site-footer">
-        <p><b>Signal Atlas</b> is a research directory, not a provider. Limits, availability, country support, and pricing can change.</p>
+        <p><b>THE ARZENS Intern Launchpad</b> is an operational resource directory, not a provider. Verify limits, availability, country support, and ethical use before you deploy or practice.</p>
         <div><a href="https://www.oracle.com/cloud/free/" target="_blank" rel="noreferrer">Oracle Free Tier</a><a href="https://pages.cloudflare.com/" target="_blank" rel="noreferrer">Cloudflare Pages</a><a href="https://neon.tech/pricing" target="_blank" rel="noreferrer">Neon Pricing</a></div>
       </footer>
     </div>

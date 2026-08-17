@@ -73,3 +73,9 @@ The wordmark uses a compact custom pairing of a monospaced “F” and a directi
 - The desktop experience uses a visibly connected atlas spine: a wider route rail, numbered route markers, category labels, and signal-line wayfinding that persists across the field guide.
 - Resource categories use deliberately varied route layouts: featured first routes, offset field-note annotations, and asymmetric spans interrupt uniform directories.
 - The dark AI section remains a **night map inset** and retains the same route numbering, signal line, mono labels, and field-guide hierarchy as the light atlas.
+- The site is now a **THE ARZENS Intern Launchpad**: a dark operational environment for interns to locate free build infrastructure, trusted learning routes, safe cyber labs, and project stacks.
+- The startup’s visual language overrides the previous paper-atlas styling: near-black surfaces, electric cyan as the primary signal, sharp technical borders, command-console microcopy, and direct operational CTAs.
+- THE ARZENS cyan logo is the default brand mark. Red identifies offensive-security and CTF contexts; purple identifies AI and research contexts. These supplied logos are always used with adequate size and contrast.
+- The voice is precise and active rather than generic: “Initialize your build route,” “Open verified resources,” and “Train safely. Ship with proof.”
+- Electric cyan is the only general action, verification, and navigation signal. Red is reserved for CTF and offensive-security context; purple is reserved for AI and research context.
+- Every major resource route includes a numbered checkpoint, an opinionated lead recommendation, compact tool cards, and a short operational note so the experience reads as a field system rather than a plain directory.
