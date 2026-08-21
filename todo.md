@@ -31,3 +31,15 @@
 - [x] Build the THE ARZENS Ship Your Project Free discovery flow, project-stack recommendations, and clear setup warnings.
 - [x] Verify all new route actions, free-tier wording, and desktop/mobile rendering.
 - [x] Save and deliver the expanded THE ARZENS deployment hub.
+
+## Intern Operations Expansion
+
+- [x] Define user journeys and interactions for Pakistan onboarding, stack planning, saved routes, and resource review status.
+- [x] Verify official free-entry services for transactional email, monitoring, authentication, file storage, CI/CD, design, and CTF event operations.
+- [x] Research provider signup and verification guidance relevant to builders applying from Pakistan.
+- [x] Add a clear Pakistan onboarding guide with plain-language account, card, phone, student, and quota notes.
+- [x] Add expanded resource records with direct official links and transparent free-tier disclosures.
+- [x] Build an interactive project planner and local saved-route workflow for interns.
+- [x] Add honest resource review-status indicators without implying live automated monitoring.
+- [x] Verify direct links, planner/saved-route interactions, build quality, and mobile presentation.
+- [x] Save and deliver the expanded THE ARZENS operations hub.

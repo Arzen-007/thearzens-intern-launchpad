@@ -83,3 +83,17 @@ The wordmark uses a compact custom pairing of a monospaced “F” and a directi
 - The left rail is the persistent command spine. It visibly tracks the active numbered route, uses an illuminated cyan signal line, and gives the long scroll an operational map rather than a sequence of isolated sections.
 - Avoid legacy lime/yellow as a general highlight. Electric cyan remains the only generic navigation, verification, recommended-route, and warning-neutral signal; red and purple retain their dedicated security and AI/research roles.
 - Resource fields use a visible route-grid substrate, featured full-width lead routes, and checkpoint annotations to interrupt repetitive card walls and make each category feel like a deliberate phase of an intern’s mission.
+
+### Operations-desk extension
+
+- The **THE ARZENS Operations Desk** is a distinct, numbered control checkpoint between project deployment and the broad resource atlas. It gives interns a Pakistan-aware account protocol, a scenario-led stack recommender, an on-device saved-route tray, and a deliberately honest source-review indicator.
+- The visual language is a cyan command ledger: a compact left marker, wide recommendation panel, amber caution edge only for verification and billing conditions, and separate utility cards rather than another uniform vendor wall.
+- A saved route is stored only in the intern’s current browser. The UI must state that it is a private device shortlist, not a synced THE ARZENS account or team record.
+- “Reviewed” refers only to the curated link and plan evidence captured for this release. It must never imply continuous live uptime monitoring of external providers.
+- Pakistan guidance remains provider-neutral and truthful: use genuine local identity details, read eligibility and payment prompts, choose no-card alternatives where needed, retain a fallback, and never bypass regional, student, phone, or card verification.
+
+## Style Decisions
+
+- The command spine is the primary orientation device: its numbered nodes, cyan continuity line, and active route state remain visibly stronger than the surrounding content.
+- Every resource route opens with an enlarged lead recommendation and a branded route marker before a dense vendor field. The site must read as a guided mission map, not a uniform directory.
+- Cyan means neutral navigation, verification, and action; red is reserved for cyber/authorized CTF context; purple is reserved for AI/research context. THE ARZENS route marks recur at mission transitions beyond the hero.

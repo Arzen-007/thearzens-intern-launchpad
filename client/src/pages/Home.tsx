@@ -9,16 +9,24 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   BookOpen,
+  Bookmark,
+  BookmarkCheck,
   Check,
   CircleAlert,
+  CircleCheckBig,
   Cloud,
   Code2,
   Crosshair,
   Database,
   ExternalLink,
+  Flag,
+  GitBranch,
   GraduationCap,
   Github,
   Globe2,
+  HardDrive,
+  KeyRound,
+  Mail,
   Menu,
   Network,
   Radar,
@@ -31,6 +39,7 @@ import {
 } from "lucide-react";
 import { expandedResources, type ExpandedCategory } from "@/data/atlasCatalog";
 import { projectStacks, shipResources, type ShipCategory, type ShipResource } from "@/data/shipFreeCatalog";
+import { operationMissions, operationsResources, pakistanProtocol, type OperationKind, type OperationMission, type OperationResource, type OperationsCategory } from "@/data/operationsCatalog";
 
 type CoreCategory =
   | "Servers"
@@ -39,7 +48,7 @@ type CoreCategory =
   | "Databases"
   | "Domains"
   | "AI Agents";
-type Category = CoreCategory | ExpandedCategory;
+type Category = CoreCategory | ExpandedCategory | OperationsCategory;
 
 type Resource = {
   name: string;
@@ -388,18 +397,19 @@ const coreResources: Resource[] = [
   },
 ];
 
-const resources: Resource[] = [...coreResources, ...expandedResources];
+const resources: Resource[] = [...coreResources, ...expandedResources, ...operationsResources];
 
 const nav = [
   { label: "Initialize", target: "top", number: "00" },
   { label: "Deploy free", target: "deploy-free", number: "01" },
-  { label: "Build systems", target: "build", number: "02" },
-  { label: "Skill path", target: "learning", number: "03" },
-  { label: "Cyber lab", target: "cyber-labs", number: "04" },
-  { label: "Tool arsenal", target: "toolkit", number: "05" },
-  { label: "Defense ops", target: "defense", number: "06" },
-  { label: "AI research", target: "agents", number: "07" },
-  { label: "CTF control", target: "ctf", number: "08" },
+  { label: "Ops desk", target: "ops", number: "02" },
+  { label: "Build systems", target: "build", number: "03" },
+  { label: "Skill path", target: "learning", number: "04" },
+  { label: "Cyber lab", target: "cyber-labs", number: "05" },
+  { label: "Tool arsenal", target: "toolkit", number: "06" },
+  { label: "Defense ops", target: "defense", number: "07" },
+  { label: "AI research", target: "agents", number: "08" },
+  { label: "CTF control", target: "ctf", number: "09" },
 ];
 
 const categoryIcons: Record<Category, typeof Server> = {
@@ -415,6 +425,7 @@ const categoryIcons: Record<Category, typeof Server> = {
   "Student Packs": GraduationCap,
   "Defense & OSINT": Radar,
   "CTF Operations": ShieldCheck,
+  "Intern Operations": Wrench,
 };
 
 const categoryNarrative: Record<Category, { eyebrow: string; title: string; copy: string }> = {
@@ -477,6 +488,11 @@ const categoryNarrative: Record<Category, { eyebrow: string; title: string; copy
     eyebrow: "08 / CTF operations",
     title: "Make the event reliable before making it difficult.",
     copy: "A great CTF needs an event layer, backup plan, clear rules, and isolated infrastructure. Use an open platform, then give vulnerable challenges their own restricted environment.",
+  },
+  "Intern Operations": {
+    eyebrow: "02 / Intern operations",
+    title: "The layers that keep a project usable after it goes live.",
+    copy: "Email, authentication, monitoring, storage, automation, design, and authorized CTF operations help a project work like a real delivery—not only a local demo.",
   },
 };
 
@@ -544,6 +560,40 @@ function ShipResourceCard({ resource, index }: { resource: ShipResource; index: 
   );
 }
 
+const operationKindIcons: Record<OperationKind, typeof Server> = {
+  Email: Mail,
+  Monitoring: Radar,
+  Authentication: KeyRound,
+  Storage: HardDrive,
+  Automation: GitBranch,
+  "Design & CTF": Flag,
+};
+
+function OperationResourceCard({ resource, index, saved, onToggleSaved }: { resource: OperationResource; index: number; saved: boolean; onToggleSaved: (name: string) => void }) {
+  const Icon = operationKindIcons[resource.kind];
+  return (
+    <article className={`operations-card ${resource.recommendation ? "operations-card--featured" : ""}`} style={{ "--card-index": index } as React.CSSProperties}>
+      <div className="operations-card__topline">
+        <div className="operations-card__identity"><span className="icon-box"><Icon size={16} strokeWidth={1.8} /></span><span>{resource.kind}</span></div>
+        <FreeType value={resource.freeType} />
+      </div>
+      <div className="operations-card__content">
+        <p className="operations-card__tag">{resource.tag}</p>
+        <h3>{resource.name}</h3>
+        <p>{resource.summary}</p>
+        <p className="operations-card__note"><CircleAlert size={14} /> {resource.note}</p>
+        <div className="operations-card__review"><CircleCheckBig size={13} /> {resource.reviewed}</div>
+      </div>
+      <div className="operations-card__actions">
+        <button onClick={() => onToggleSaved(resource.name)} aria-pressed={saved} aria-label={`${saved ? "Remove" : "Save"} ${resource.name} in your local route tray`}>
+          {saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />} {saved ? "Saved" : "Save route"}
+        </button>
+        <a href={resource.url} target="_blank" rel="noreferrer" aria-label={`Open ${resource.name} official website`}>Open official <ArrowUpRight size={16} /></a>
+      </div>
+    </article>
+  );
+}
+
 function CategorySection({ category, id, search }: { category: Category; id: string; search: string }) {
   const content = categoryNarrative[category];
   const gridClass = category.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "-");
@@ -601,6 +651,16 @@ export default function Home() {
   const [activeAudience, setActiveAudience] = useState<Resource["audience"] | "All audiences">("All audiences");
   const [search, setSearch] = useState("");
   const [shipCategory, setShipCategory] = useState<ShipCategory | "All deployment routes">("All deployment routes");
+  const [operationKind, setOperationKind] = useState<OperationKind | "All operations">("All operations");
+  const [operationMission, setOperationMission] = useState<OperationMission>("Portfolio & website");
+  const [savedRouteNames, setSavedRouteNames] = useState<string[]>(() => {
+    try {
+      const saved = window.localStorage.getItem("the-arzens-saved-routes");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [activeRoute, setActiveRoute] = useState("top");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -615,10 +675,15 @@ export default function Home() {
     });
   }, [activeAudience, activeCategory, search]);
 
-  const categories: (Category | "All")[] = ["All", "Servers", "Frontend", "Backend", "Databases", "Domains", "Learning", "Cyber Labs", "Dev Tools", "Student Packs", "Defense & OSINT", "AI Agents", "CTF Operations"];
+  const categories: (Category | "All")[] = ["All", "Servers", "Frontend", "Backend", "Databases", "Domains", "Intern Operations", "Learning", "Cyber Labs", "Dev Tools", "Student Packs", "Defense & OSINT", "AI Agents", "CTF Operations"];
   const audiences: (Resource["audience"] | "All audiences")[] = ["All audiences", "Developer", "Cyber student", "CTF organizer", "Student"];
   const shipCategories: (ShipCategory | "All deployment routes")[] = ["All deployment routes", "Static & frontend", "Backend & API", "Full-stack & data", "Servers & compute", "Domains & identity", "Free AI"];
+  const operationKinds: (OperationKind | "All operations")[] = ["All operations", "Email", "Monitoring", "Authentication", "Storage", "Automation", "Design & CTF"];
   const visibleShipResources = shipResources.filter((resource) => shipCategory === "All deployment routes" || resource.category === shipCategory);
+  const visibleOperationResources = useMemo(() => operationsResources.filter((resource) => operationKind === "All operations" || resource.kind === operationKind), [operationKind]);
+  const activeMissionPlan = useMemo(() => operationMissions.find((plan) => plan.mission === operationMission) ?? operationMissions[0], [operationMission]);
+  const activeMissionResources = useMemo(() => activeMissionPlan.resourceNames.map((name) => operationsResources.find((resource) => resource.name === name)).filter((resource): resource is OperationResource => Boolean(resource)), [activeMissionPlan]);
+  const savedOperationResources = useMemo(() => operationsResources.filter((resource) => savedRouteNames.includes(resource.name)), [savedRouteNames]);
 
   useEffect(() => {
     const sections = nav.map((item) => document.getElementById(item.target)).filter((section): section is HTMLElement => Boolean(section));
@@ -630,6 +695,14 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("the-arzens-saved-routes", JSON.stringify(savedRouteNames));
+    } catch {
+      // The launchpad remains usable when browser storage is unavailable.
+    }
+  }, [savedRouteNames]);
+
   const handleCopyStack = async () => {
     const stack = "CTF starter stack: Oracle Cloud Always Free (CTFd control plane) + Cloudflare Pages (public frontend) + Cloudflare DNS/TLS + separate isolated challenge runners + backups in Oracle Object Storage or Cloudflare R2.";
     try {
@@ -639,6 +712,10 @@ export default function Home() {
     } catch {
       setCopied(false);
     }
+  };
+
+  const toggleSavedRoute = (name: string) => {
+    setSavedRouteNames((current) => current.includes(name) ? current.filter((route) => route !== name) : [...current, name]);
   };
 
   return (
@@ -698,7 +775,7 @@ export default function Home() {
               <button onClick={() => scrollToId("finder")} className="text-button">Open resource grid <ArrowDownRight size={17} /></button>
             </div>
             <div className="hero__stats" aria-label="Website highlights">
-              <div><strong>{resources.length + shipResources.length}</strong><span>official routes</span></div>
+              <div><strong>{resources.length + shipResources.length + operationsResources.length}</strong><span>official routes</span></div>
               <div><strong>04</strong><span>intern mission paths</span></div>
               <div><strong>00</strong><span>paid tools required</span></div>
             </div>
@@ -776,6 +853,60 @@ export default function Home() {
           </div>
           <div className="ship-free__grid">
             {visibleShipResources.map((resource, index) => <ShipResourceCard resource={resource} index={index} key={resource.name} />)}
+          </div>
+        </section>
+
+        <section className="operations-desk section-anchor" id="ops" aria-labelledby="ops-title">
+          <div className="operations-desk__header">
+            <div className="operations-desk__marker"><span>02</span><p>INTERN<br />OPERATIONS</p></div>
+            <div>
+              <p className="eyebrow">THE ARZENS / BUILD CONTINUITY</p>
+              <h2 id="ops-title">A project is not finished<br /><em>when the URL opens.</em></h2>
+              <p>Use these free operational layers to plan the work, add sign-in or email, automate a repeatable build, observe your own public service, and keep an authorized CTF event organized.</p>
+            </div>
+            <div className="operations-desk__review"><CircleCheckBig size={18} /><p><b>Source review, not live monitoring.</b> Free-entry details were checked against official provider routes for this release on 21 Aug 2026. Plans, quotas, and country availability can change after publication.</p></div>
+          </div>
+
+          <div className="operations-desk__workbench">
+            <article className="pk-protocol" aria-labelledby="pk-title">
+              <div className="pk-protocol__title"><span>PK</span><div><p className="eyebrow">Pakistan account protocol</p><h3 id="pk-title">Open accounts without bad surprises.</h3></div></div>
+              <div className="pk-protocol__steps">
+                {pakistanProtocol.map((step) => <div key={step.code}><span>{step.code}</span><div><b>{step.title}</b><p>{step.detail}</p></div></div>)}
+              </div>
+            </article>
+
+            <article className="ops-planner" aria-labelledby="planner-title">
+              <div className="ops-planner__header"><div><p className="eyebrow">Mission planner</p><h3 id="planner-title">Choose the project. Get the support layers.</h3></div><span>THE ARZENS / ROUTE-MATCH</span></div>
+              <div className="ops-planner__missions" role="tablist" aria-label="Choose an intern project mission">
+                {operationMissions.map((plan) => <button className={operationMission === plan.mission ? "is-active" : ""} key={plan.mission} onClick={() => setOperationMission(plan.mission)} role="tab" aria-selected={operationMission === plan.mission}>{plan.mission}</button>)}
+              </div>
+              <div className="ops-planner__result">
+                <div><p className="eyebrow">Recommended operations bundle</p><h4>{activeMissionPlan.mission}</h4><p>{activeMissionPlan.outcome}</p></div>
+                <div className="ops-planner__tools">
+                  {activeMissionResources.map((resource) => <a href={resource.url} target="_blank" rel="noreferrer" key={resource.name}><span>{resource.kind}</span><b>{resource.name}</b><ArrowUpRight size={14} /></a>)}
+                </div>
+                <div className="ops-planner__note"><CircleAlert size={15} /><p>{activeMissionPlan.deploymentNote}</p></div>
+              </div>
+              <button className="ops-planner__browse" onClick={() => { setOperationKind("All operations"); scrollToId("operations-catalog"); }}>Browse all support layers <ArrowDownRight size={16} /></button>
+            </article>
+          </div>
+
+          <div className="saved-routes" aria-live="polite">
+            <div className="saved-routes__title"><BookmarkCheck size={18} /><div><p className="eyebrow">Local route tray</p><b>{savedOperationResources.length} saved operational {savedOperationResources.length === 1 ? "route" : "routes"}</b></div></div>
+            <p>Saved only in this browser on this device. It is not synced to a THE ARZENS account or shared with anyone.</p>
+            <div className="saved-routes__list">
+              {savedOperationResources.length > 0 ? savedOperationResources.map((resource) => <span key={resource.name}><a href={resource.url} target="_blank" rel="noreferrer">{resource.name}<ArrowUpRight size={13} /></a><button onClick={() => toggleSavedRoute(resource.name)} aria-label={`Remove ${resource.name} from saved routes`}>Remove</button></span>) : <em>Save a route from the operations grid to keep your personal shortlist here.</em>}
+            </div>
+          </div>
+
+          <div className="operations-catalog" id="operations-catalog">
+            <div className="operations-catalog__head"><div><p className="eyebrow">Operational tool layers</p><p><b>{visibleOperationResources.length}</b> official routes with a release review label and free-entry disclosure.</p></div><span><CircleCheckBig size={14} /> REVIEWED / 21 AUG 2026</span></div>
+            <div className="operations-catalog__filters" role="tablist" aria-label="Filter operational resources">
+              {operationKinds.map((kind) => <button className={operationKind === kind ? "is-active" : ""} key={kind} onClick={() => setOperationKind(kind)} role="tab" aria-selected={operationKind === kind}>{kind}</button>)}
+            </div>
+            <div className="operations-catalog__grid">
+              {visibleOperationResources.map((resource, index) => <OperationResourceCard resource={resource} index={index} saved={savedRouteNames.includes(resource.name)} onToggleSaved={toggleSavedRoute} key={resource.name} />)}
+            </div>
           </div>
         </section>
 
