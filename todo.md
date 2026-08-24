@@ -69,7 +69,7 @@
 - [x] Build a protected dashboard to add, edit, publish, and archive resource cards through tracked repository commits.
 - [x] Create and install a private, least-privilege GitHub App for this repository after user confirmation.
 - [x] Verify that dashboard changes create understandable repository commits and that public routes remain unaffected.
-- [ ] Save and deliver the GitHub-owned THE ARZENS Launchpad workflow.
+- [x] Save and deliver the GitHub-owned THE ARZENS Launchpad workflow.
 
 ## GitHub Pages and Protected Commit Service
 
@@ -95,7 +95,7 @@
 - [x] Render managed resource operational notes on the matching public cards so dashboard updates are visibly reflected after Pages deployment.
 - [x] Diagnose and resolve the reported owner sign-in failure for the protected THE ARZENS control room.
 - [x] Keep the dashboard editor save control visible and keyboard-reachable at constrained viewport heights.
-- [ ] Verify the live GitHub Pages card visibly displays the exact dashboard-edited managed operational note.
-- [ ] Distinguish the managed GitHub Pages record from the similarly named static deployment card if live inspection shows ambiguity.
-- [ ] Add a clear managed-catalog source label to duplicate public resource cards so owner-dashboard changes can be visually isolated on GitHub Pages.
-- [ ] Re-verify the distinct managed GitHub Pages card and its dashboard-edited operational note in the live public UI.
+- [x] Verify the live GitHub Pages card visibly displays the exact dashboard-edited managed operational note.
+- [x] Distinguish the managed GitHub Pages record from the similarly named static deployment card if live inspection shows ambiguity.
+- [x] Add a clear managed-catalog source label to duplicate public resource cards so owner-dashboard changes can be visually isolated on GitHub Pages.
+- [x] Re-verify the distinct managed GitHub Pages card and its dashboard-edited operational note in the live public UI.
