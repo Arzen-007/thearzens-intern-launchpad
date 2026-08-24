@@ -65,18 +65,18 @@
 
 - [x] Define the repository-backed catalog format, edit workflow, dashboard access model, and minimum GitHub App permissions.
 - [x] Create a private THE ARZENS Launchpad repository and preserve the current source and deployment history.
-- [ ] Upgrade the project for secure administrative access and server-side GitHub integration.
-- [ ] Build a protected dashboard to add, edit, publish, and archive resource cards through tracked repository commits.
-- [ ] Create and install a private, least-privilege GitHub App for this repository after user confirmation.
+- [x] Upgrade the project for secure administrative access and server-side GitHub integration.
+- [x] Build a protected dashboard to add, edit, publish, and archive resource cards through tracked repository commits.
+- [x] Create and install a private, least-privilege GitHub App for this repository after user confirmation.
 - [ ] Verify that dashboard changes create understandable repository commits and that public routes remain unaffected.
 - [ ] Save and deliver the GitHub-owned THE ARZENS Launchpad workflow.
 
 ## GitHub Pages and Protected Commit Service
 
-- [ ] Prepare a GitHub Pages deployment workflow for the public Launchpad from the user-owned repository.
-- [ ] Define a structured repository catalog file that the dashboard can safely update through reviewable commits.
-- [ ] Build an owner-protected dashboard route and server-side commit service with secure GitHub App secret boundaries.
-- [ ] Create and install a private GitHub App limited to repository contents for THE ARZENS Launchpad after explicit confirmation.
+- [x] Prepare a GitHub Pages deployment workflow for the public Launchpad from the user-owned repository.
+- [x] Define a structured repository catalog file that the dashboard can safely update through reviewable commits.
+- [x] Build an owner-protected dashboard route and server-side commit service with secure GitHub App secret boundaries.
+- [x] Create and install a private GitHub App limited to repository contents for THE ARZENS Launchpad after explicit confirmation.
 - [ ] Verify a dashboard change creates a reviewable GitHub commit and that the public GitHub Pages build uses the updated catalog.
 - [x] Validate the GitHub Pages build base path and replace managed-storage-only logo paths with a Pages-safe fallback.
 - [x] Create a versioned static catalog overlay with active and archived resource records that is compiled into the public site.
@@ -85,5 +85,8 @@
 - [x] Add server-side readiness checks for the private GitHub App without exposing credentials to the browser or repository.
 - [x] Add real GitHub Pages deployment visibility with latest workflow result and publication state in the THE ARZENS owner control room.
 - [x] Add clear loading and error states for catalog connection and repository reads so stale fallback data is never presented silently.
-- [ ] Validate the installed private GitHub App with a read-only repository catalog request before enabling dashboard mutations.
-- [ ] Normalize the GitHub-downloaded RSA private key to the signing format required by the server publisher.
+- [x] Validate the installed private GitHub App with a read-only repository catalog request before enabling dashboard mutations.
+- [x] Normalize the GitHub-downloaded RSA private key to the signing format required by the server publisher.
+- [x] Correct the GitHub Pages workflow setup order so pnpm is installed before dependency caching and the deployment can run successfully.
+- [x] Remove the duplicate pnpm version declaration from the Pages workflow so GitHub uses the exact package-manager version locked in the repository.
+- [x] Configure the client router for the GitHub Pages repository base path so the public root does not render the 404 screen.
