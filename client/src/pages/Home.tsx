@@ -42,6 +42,7 @@ import { projectStacks, shipResources, type ShipCategory, type ShipResource } fr
 import { operationMissions, operationsResources, pakistanProtocol, type OperationKind, type OperationMission, type OperationResource, type OperationsCategory } from "@/data/operationsCatalog";
 import { providerIdentityFor } from "@/data/providerIdentity";
 import { activeManagedResources } from "@/data/managedCatalog";
+import "@/styles/managedCatalog.css";
 
 type CoreCategory =
   | "Servers"
@@ -63,6 +64,7 @@ type Resource = {
   recommendation?: boolean;
   audience?: "Developer" | "Cyber student" | "CTF organizer" | "Student" | "Everyone";
   level?: "Start" | "Build" | "Practice" | "Operate";
+  managedByDashboard?: boolean;
 };
 
 type TechnicalFilter =
@@ -589,6 +591,7 @@ function ResourceCard({ resource, index }: { resource: Resource; index: number }
       </div>
       <div className="resource-card__content">
         <ProviderIdentity resource={resource} />
+        {resource.managedByDashboard && <p className="resource-card__source">THE ARZENS OWNER CATALOG</p>}
         <p className="resource-card__tag">{resource.tag}</p>
         <h3>{resource.name}</h3>
         <p className="resource-card__summary">{resource.summary}</p>

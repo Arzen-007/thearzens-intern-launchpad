@@ -5,4 +5,4 @@ export const managedCatalog: ManagedCatalog = managedCatalogSchema.parse(catalog
 
 export const activeManagedResources = managedCatalog.resources
   .filter((resource) => resource.status === "active")
-  .map(({ id: _id, status: _status, updatedAt: _updatedAt, ...resource }) => resource);
+  .map(({ id: _id, status: _status, updatedAt: _updatedAt, ...resource }) => ({ ...resource, managedByDashboard: true as const }));

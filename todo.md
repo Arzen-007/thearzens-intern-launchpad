@@ -68,7 +68,7 @@
 - [x] Upgrade the project for secure administrative access and server-side GitHub integration.
 - [x] Build a protected dashboard to add, edit, publish, and archive resource cards through tracked repository commits.
 - [x] Create and install a private, least-privilege GitHub App for this repository after user confirmation.
-- [ ] Verify that dashboard changes create understandable repository commits and that public routes remain unaffected.
+- [x] Verify that dashboard changes create understandable repository commits and that public routes remain unaffected.
 - [ ] Save and deliver the GitHub-owned THE ARZENS Launchpad workflow.
 
 ## GitHub Pages and Protected Commit Service
@@ -77,7 +77,7 @@
 - [x] Define a structured repository catalog file that the dashboard can safely update through reviewable commits.
 - [x] Build an owner-protected dashboard route and server-side commit service with secure GitHub App secret boundaries.
 - [x] Create and install a private GitHub App limited to repository contents for THE ARZENS Launchpad after explicit confirmation.
-- [ ] Verify a dashboard change creates a reviewable GitHub commit and that the public GitHub Pages build uses the updated catalog.
+- [x] Verify a dashboard change creates a reviewable GitHub commit and that the public GitHub Pages build uses the updated catalog.
 - [x] Validate the GitHub Pages build base path and replace managed-storage-only logo paths with a Pages-safe fallback.
 - [x] Create a versioned static catalog overlay with active and archived resource records that is compiled into the public site.
 - [x] Wire the public launchpad to merge GitHub-managed resource records without changing the verified core catalog.
@@ -90,3 +90,12 @@
 - [x] Correct the GitHub Pages workflow setup order so pnpm is installed before dependency caching and the deployment can run successfully.
 - [x] Remove the duplicate pnpm version declaration from the Pages workflow so GitHub uses the exact package-manager version locked in the repository.
 - [x] Configure the client router for the GitHub Pages repository base path so the public root does not render the 404 screen.
+- [x] Publish one legitimate catalog change through the owner `/admin` control room and verify its GitHub commit history.
+- [x] Verify the Pages workflow and public site reflect the exact catalog change made through the owner dashboard.
+- [x] Render managed resource operational notes on the matching public cards so dashboard updates are visibly reflected after Pages deployment.
+- [x] Diagnose and resolve the reported owner sign-in failure for the protected THE ARZENS control room.
+- [x] Keep the dashboard editor save control visible and keyboard-reachable at constrained viewport heights.
+- [ ] Verify the live GitHub Pages card visibly displays the exact dashboard-edited managed operational note.
+- [ ] Distinguish the managed GitHub Pages record from the similarly named static deployment card if live inspection shows ambiguity.
+- [ ] Add a clear managed-catalog source label to duplicate public resource cards so owner-dashboard changes can be visually isolated on GitHub Pages.
+- [ ] Re-verify the distinct managed GitHub Pages card and its dashboard-edited operational note in the live public UI.

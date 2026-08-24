@@ -1,0 +1,19 @@
+.resource-card__source {
+  display: inline-flex;
+  width: max-content;
+  margin: 0 0 0.5rem;
+  padding: 0.26rem 0.5rem;
+  border: 1px solid rgba(76, 233, 255, 0.68);
+  background: rgba(76, 233, 255, 0.09);
+  color: #4ce9ff;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+}
+
+.resource-card:has(.resource-card__source) {
+  border-color: rgba(76, 233, 255, 0.62);
+  box-shadow: inset 2px 0 0 #4ce9ff, inset 0 1px 0 rgba(215, 251, 255, 0.08);
+}
