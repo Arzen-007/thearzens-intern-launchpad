@@ -97,3 +97,16 @@ The wordmark uses a compact custom pairing of a monospaced “F” and a directi
 - The command spine is the primary orientation device: its numbered nodes, cyan continuity line, and active route state remain visibly stronger than the surrounding content.
 - Every resource route opens with an enlarged lead recommendation and a branded route marker before a dense vendor field. The site must read as a guided mission map, not a uniform directory.
 - Cyan means neutral navigation, verification, and action; red is reserved for cyber/authorized CTF context; purple is reserved for AI/research context. THE ARZENS route marks recur at mission transitions beyond the hero.
+
+### Technical filter reorganization
+
+- The main discovery grid uses **technical need first**, in this order: Frontend, Backend, Servers, Databases, Domains, Subdomains, and Labs. These seven filters answer the first question an intern asks: “What layer do I need right now?”
+- A second compact filter row retains discoverability for specialist routes: Operations, Dev Tools, Student Benefits, AI Agents, and Security & CTF. It prevents learning, student, defensive, and event resources from being incorrectly mixed into infrastructure layers.
+- Domains and Subdomains become visibly distinct. “Domains” means naming, DNS, and custom-domain management; “Subdomains” means free shared hostnames or delegated subdomain routes. The UI must state that a free subdomain is not the same as owning a registered domain.
+- Card labels preserve their original operational context, while discovery filters use the simpler technical taxonomy. This lets the launchpad remain accurate without making the first filter bar confusing.
+
+### Visual-review implementation notes
+
+- The command spine is intentionally louder than ordinary resource fields: active nodes glow cyan, a continuous cyan route line runs through the rail, and all rail nodes have visible mission-state markers.
+- Each major resource route begins with a larger lead checkpoint before its compact cards. The checkpoint explains the mission, while only the lead provider receives the brightest cyan treatment.
+- Ordinary resource cards use quiet graphite-blue technical edges. Bright cyan is reserved for active navigation, verified/primary actions, and recommended routes; security lead routes retain red, and AI/research lead routes retain purple.

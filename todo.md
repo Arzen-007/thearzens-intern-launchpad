@@ -43,3 +43,11 @@
 - [x] Add honest resource review-status indicators without implying live automated monitoring.
 - [x] Verify direct links, planner/saved-route interactions, build quality, and mobile presentation.
 - [x] Save and deliver the expanded THE ARZENS operations hub.
+
+## Technical Filter Reorganization
+
+- [x] Audit every current route and map it to Frontend, Backend, Servers, Databases, Labs, Domains, Subdomains, or a clearly named secondary technical group.
+- [x] Design a concise filter hierarchy that keeps specialist resources discoverable without mixing unrelated tools.
+- [x] Update the catalog model, filter labels, navigation, and section language around the requested technical categories.
+- [x] Verify desktop/mobile filter behavior, result counts, direct-link preservation, and category coverage.
+- [x] Save and deliver the reorganized THE ARZENS technical resource hub.

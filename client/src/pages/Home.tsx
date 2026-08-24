@@ -63,6 +63,42 @@ type Resource = {
   level?: "Start" | "Build" | "Practice" | "Operate";
 };
 
+type TechnicalFilter =
+  | "All"
+  | "Frontend"
+  | "Backend"
+  | "Servers"
+  | "Databases"
+  | "Domains"
+  | "Subdomains"
+  | "Labs"
+  | "Operations"
+  | "Dev Tools"
+  | "Student Benefits"
+  | "AI Agents"
+  | "Security & CTF";
+
+function isSubdomainRoute(resource: Resource) {
+  const routeText = `${resource.name} ${resource.tag} ${resource.summary} ${resource.note}`.toLowerCase();
+  return resource.category === "Domains" && /subdomain|hostname|dynamic dns|ddns/.test(routeText);
+}
+
+function matchesTechnicalFilter(resource: Resource, filter: TechnicalFilter) {
+  if (filter === "All") return true;
+  if (filter === "Frontend") return resource.category === "Frontend";
+  if (filter === "Backend") return resource.category === "Backend";
+  if (filter === "Servers") return resource.category === "Servers";
+  if (filter === "Databases") return resource.category === "Databases";
+  if (filter === "Domains") return resource.category === "Domains" && !isSubdomainRoute(resource);
+  if (filter === "Subdomains") return isSubdomainRoute(resource);
+  if (filter === "Labs") return resource.category === "Cyber Labs";
+  if (filter === "Operations") return resource.category === "Intern Operations";
+  if (filter === "Dev Tools") return resource.category === "Dev Tools";
+  if (filter === "Student Benefits") return resource.category === "Learning" || resource.category === "Student Packs";
+  if (filter === "AI Agents") return resource.category === "AI Agents";
+  return resource.category === "Defense & OSINT" || resource.category === "CTF Operations";
+}
+
 const coreResources: Resource[] = [
   {
     name: "Oracle Cloud",
@@ -647,7 +683,7 @@ function CategorySection({ category, id, search }: { category: Category; id: str
 }
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState<Category | "All">("All");
+  const [activeTechnicalFilter, setActiveTechnicalFilter] = useState<TechnicalFilter>("All");
   const [activeAudience, setActiveAudience] = useState<Resource["audience"] | "All audiences">("All audiences");
   const [search, setSearch] = useState("");
   const [shipCategory, setShipCategory] = useState<ShipCategory | "All deployment routes">("All deployment routes");
@@ -668,14 +704,15 @@ export default function Home() {
   const visibleResources = useMemo(() => {
     const query = search.trim().toLowerCase();
     return resources.filter((resource) => {
-      const categoryMatch = activeCategory === "All" || resource.category === activeCategory;
+      const categoryMatch = matchesTechnicalFilter(resource, activeTechnicalFilter);
       const audienceMatch = activeAudience === "All audiences" || resource.audience === activeAudience || resource.audience === "Everyone";
       const textMatch = `${resource.name} ${resource.category} ${resource.tag} ${resource.summary}`.toLowerCase().includes(query);
       return categoryMatch && audienceMatch && textMatch;
     });
-  }, [activeAudience, activeCategory, search]);
+  }, [activeAudience, activeTechnicalFilter, search]);
 
-  const categories: (Category | "All")[] = ["All", "Servers", "Frontend", "Backend", "Databases", "Domains", "Intern Operations", "Learning", "Cyber Labs", "Dev Tools", "Student Packs", "Defense & OSINT", "AI Agents", "CTF Operations"];
+  const technicalFilters: TechnicalFilter[] = ["All", "Frontend", "Backend", "Servers", "Databases", "Domains", "Subdomains", "Labs"];
+  const specialistFilters: TechnicalFilter[] = ["Operations", "Dev Tools", "Student Benefits", "AI Agents", "Security & CTF"];
   const audiences: (Resource["audience"] | "All audiences")[] = ["All audiences", "Developer", "Cyber student", "CTF organizer", "Student"];
   const shipCategories: (ShipCategory | "All deployment routes")[] = ["All deployment routes", "Static & frontend", "Backend & API", "Full-stack & data", "Servers & compute", "Domains & identity", "Free AI"];
   const operationKinds: (OperationKind | "All operations")[] = ["All operations", "Email", "Monitoring", "Authentication", "Storage", "Automation", "Design & CTF"];
@@ -913,12 +950,24 @@ export default function Home() {
         <section className="finder section-anchor" id="finder" aria-labelledby="finder-title">
           <div className="finder__head">
             <div><p className="eyebrow">Resource command</p><h2 id="finder-title">Open the right tool.<br /><em>Complete the task.</em></h2></div>
-            <div className="search-field"><Search size={18} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search servers, cyber labs, agents, CTF…" aria-label="Search free resources" /></div>
+            <div className="search-field"><Search size={18} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search frontend, backend, servers, labs…" aria-label="Search free resources" /></div>
           </div>
-          <div className="filter-row" role="tablist" aria-label="Filter resources by category">
-            {categories.map((category) => (
-              <button className={`filter-chip ${activeCategory === category ? "is-active" : ""}`} key={category} onClick={() => setActiveCategory(category)} role="tab" aria-selected={activeCategory === category}>{category}</button>
-            ))}
+          <div className="finder__filter-group">
+            <p className="eyebrow">Technical layer</p>
+            <div className="filter-row" role="tablist" aria-label="Filter resources by technical layer">
+              {technicalFilters.map((filter) => (
+                <button className={`filter-chip ${activeTechnicalFilter === filter ? "is-active" : ""}`} key={filter} onClick={() => setActiveTechnicalFilter(filter)} role="tab" aria-selected={activeTechnicalFilter === filter}>{filter}</button>
+              ))}
+            </div>
+          </div>
+          <div className="finder__filter-group finder__filter-group--specialist">
+            <p className="eyebrow">Specialist route</p>
+            <div className="filter-row" role="tablist" aria-label="Filter specialist resources">
+              {specialistFilters.map((filter) => (
+                <button className={`filter-chip ${activeTechnicalFilter === filter ? "is-active" : ""}`} key={filter} onClick={() => setActiveTechnicalFilter(filter)} role="tab" aria-selected={activeTechnicalFilter === filter}>{filter}</button>
+              ))}
+            </div>
+            <p className="finder__filter-note"><b>Domains</b> are naming and DNS routes. <b>Subdomains</b> are free shared hostnames or delegated routes; they are not the same as owning a registered domain.</p>
           </div>
           <div className="audience-row" role="tablist" aria-label="Filter resources by audience">
             <span>For:</span>
