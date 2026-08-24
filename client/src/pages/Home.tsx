@@ -41,6 +41,7 @@ import { expandedResources, type ExpandedCategory } from "@/data/atlasCatalog";
 import { projectStacks, shipResources, type ShipCategory, type ShipResource } from "@/data/shipFreeCatalog";
 import { operationMissions, operationsResources, pakistanProtocol, type OperationKind, type OperationMission, type OperationResource, type OperationsCategory } from "@/data/operationsCatalog";
 import { providerIdentityFor } from "@/data/providerIdentity";
+import { activeManagedResources } from "@/data/managedCatalog";
 
 type CoreCategory =
   | "Servers"
@@ -434,7 +435,7 @@ const coreResources: Resource[] = [
   },
 ];
 
-const resources: Resource[] = [...coreResources, ...expandedResources, ...operationsResources];
+const resources: Resource[] = [...coreResources, ...expandedResources, ...operationsResources, ...activeManagedResources];
 
 const nav = [
   { label: "Initialize", target: "top", number: "00" },
@@ -542,12 +543,32 @@ function FreeType({ value }: { value: Resource["freeType"] }) {
   return <span className={className}>{value}</span>;
 }
 
+function faviconFor(url: string) {
+  try {
+    return `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(new URL(url).origin)}&sz=128`;
+  } catch {
+    return undefined;
+  }
+}
+
+function ArzensMark({ tone = "cyan", label }: { tone?: "cyan" | "red" | "purple"; label?: string }) {
+  return (
+    <span className={`arzens-signal arzens-signal--${tone}`} role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
+      <span className="arzens-signal__core">A</span>
+      <i /><i /><i />
+    </span>
+  );
+}
+
 function ProviderIdentity({ resource }: { resource: Pick<Resource, "name" | "url" | "freeType"> }) {
   const provider = providerIdentityFor(resource);
+  const fallback = faviconFor(resource.url);
+  const logo = import.meta.env.BASE_URL === "/" ? provider.logo ?? fallback : fallback;
   return (
     <div className="provider-identity">
       <span className="provider-identity__logo" aria-hidden="true">
-        {provider.logo ? <img src={provider.logo} alt="" loading="lazy" /> : <b>{provider.initials}</b>}
+        {logo ? <img src={logo} alt="" loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} /> : <b>{provider.initials}</b>}
+        {!logo && <b>{provider.initials}</b>}
       </span>
       <span className="provider-identity__copy"><b>{provider.organization}</b><small>Official provider</small></span>
       <span className="provider-identity__offer">{provider.offer}</span>
@@ -777,7 +798,7 @@ export default function Home() {
       <aside className="atlas-rail" aria-label="Section navigation">
         <div className="rail-brand">
           <button className="brand-mark" onClick={() => { setActiveRoute("top"); scrollToId("top"); }} aria-label="Return to the top of THE ARZENS Intern Launchpad">
-            <img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS logo" />
+            <ArzensMark label="THE ARZENS logo" />
           </button>
           <span><b>THE</b><i>/</i>ARZENS</span>
         </div>
@@ -797,7 +818,7 @@ export default function Home() {
 
       <header className="mobile-header">
         <button className="brand-mark brand-mark--mobile" onClick={() => { setActiveRoute("top"); scrollToId("top"); }} aria-label="Return to top">
-          <img src="/manus-storage/thearzens-blue_839fa124.png" alt="" />
+          <ArzensMark />
         </button>
         <p>THE ARZENS</p>
         <button className="menu-button" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label="Toggle navigation menu">
@@ -837,7 +858,7 @@ export default function Home() {
           </div>
           <div className="hero__visual">
             <div className="system-grid" aria-hidden="true" />
-            <img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS cyan logo" />
+            <ArzensMark label="THE ARZENS cyan logo" />
             <div className="hero__route-card">
               <span className="hero__route-dot" />
               <div><b>INTERN LAUNCH ROUTE READY</b><p>Verify → build → deploy</p></div>
@@ -865,9 +886,9 @@ export default function Home() {
           </div>
           <div className="journey-board__grid">
             <button onClick={() => scrollToId("deploy-free")}><span>01 / DEPLOY</span><Code2 size={20} /><b>Ship a live project</b><small>Code → deploy → database → domain</small><ArrowDownRight size={18} /></button>
-            <button className="journey-card--red" onClick={() => scrollToId("cyber-labs")}><span>02 / TRAIN</span><Crosshair size={20} /><b>Learn cybersecurity</b><small>Foundations → authorized labs → defense</small><img src="/manus-storage/thearzens-red_a8031da9.png" alt="" /><ArrowDownRight size={18} /></button>
+            <button className="journey-card--red" onClick={() => scrollToId("cyber-labs")}><span>02 / TRAIN</span><Crosshair size={20} /><b>Learn cybersecurity</b><small>Foundations → authorized labs → defense</small><ArzensMark tone="red" /><ArrowDownRight size={18} /></button>
             <button onClick={() => scrollToId("toolkit")}><span>03 / UNLOCK</span><GraduationCap size={20} /><b>Use student access</b><small>Verify → unlock software → build portfolio</small><ArrowDownRight size={18} /></button>
-            <button className="journey-card--purple" onClick={() => scrollToId("agents")}><span>04 / RESEARCH</span><Sparkles size={20} /><b>Build with AI agents</b><small>Research → code → test → document</small><img src="/manus-storage/thearzens-purple_ce9a6f94.png" alt="" /><ArrowDownRight size={18} /></button>
+            <button className="journey-card--purple" onClick={() => scrollToId("agents")}><span>04 / RESEARCH</span><Sparkles size={20} /><b>Build with AI agents</b><small>Research → code → test → document</small><ArzensMark tone="purple" /><ArrowDownRight size={18} /></button>
           </div>
         </section>
 
@@ -1033,7 +1054,7 @@ export default function Home() {
           <div className="agents-panel__header">
             <div>
               <p className="eyebrow">06 / AI RESEARCH GRID</p>
-              <div className="night-map-stamp"><img src="/manus-storage/thearzens-purple_ce9a6f94.png" alt="THE ARZENS purple research mark" /><span>06</span><b>Research<br />node</b><i /></div>
+              <div className="night-map-stamp"><ArzensMark tone="purple" label="THE ARZENS purple research mark" /><span>06</span><b>Research<br />node</b><i /></div>
               <h2 id="agent-title">Not every chat window<br /><em>runs a real task.</em></h2>
             </div>
             <p>These are the strongest free-entry web tools I could verify for multi-step work. Use the labels: some run code in a VM, some build apps inside a browser workspace, and some are simply useful web model interfaces.</p>
@@ -1052,7 +1073,7 @@ export default function Home() {
         <section className="ctf-zone section-anchor" id="ctf" aria-labelledby="ctf-title">
           <div className="ctf-zone__copy">
             <p className="eyebrow">07 / AUTHORIZED CTF CONTROL</p>
-            <div className="ctf-brand-mark"><img src="/manus-storage/thearzens-red_a8031da9.png" alt="THE ARZENS red CTF mark" /></div>
+            <div className="ctf-brand-mark"><ArzensMark tone="red" label="THE ARZENS red CTF mark" /></div>
             <h2 id="ctf-title">Run the scoreboard.<br /><em>Isolate the challenge.</em></h2>
             <p>For a small authorized CTF, start with a control plane on Oracle Cloud, serve the public experience from Cloudflare Pages, and place intentionally vulnerable challenge containers on a separate isolated runner. Your scoreboard should never share unrestricted host access with a vulnerable web or pwn challenge.</p>
             <div className="ctf-zone__stack">
@@ -1065,12 +1086,12 @@ export default function Home() {
               <a href="https://docs.ctfd.io/docs/deployment/installation/" target="_blank" rel="noreferrer" className="text-button">Open CTFd install docs <ExternalLink size={16} /></a>
             </div>
           </div>
-          <div className="ctf-zone__visual"><img src="/manus-storage/ctf-isolation-atlas_b5d8d92a.png" alt="Abstract isolated CTF infrastructure illustration" /></div>
+          <div className="ctf-zone__visual" role="img" aria-label="Abstract isolated CTF infrastructure schematic"><ArzensMark tone="red" /><div className="ctf-zone__node ctf-zone__node--one" /><div className="ctf-zone__node ctf-zone__node--two" /><div className="ctf-zone__node ctf-zone__node--three" /></div>
         </section>
         <CategorySection category="CTF Operations" id="ctf-operations" search={search} />
 
         <section className="promise-strip">
-          <div className="promise-strip__mark"><img src="/manus-storage/thearzens-blue_839fa124.png" alt="THE ARZENS logo" /></div>
+          <div className="promise-strip__mark"><ArzensMark label="THE ARZENS logo" /></div>
           <div><p className="eyebrow">THE ARZENS INTERN PRINCIPLE</p><h2>Train safely. Ship with proof.<br />Keep your work portable.</h2></div>
           <a href="https://github.com/CTFd/CTFd" target="_blank" rel="noreferrer" className="promise-strip__link"><Github size={19} /> Open-source CTFd <ArrowUpRight size={18} /></a>
         </section>
