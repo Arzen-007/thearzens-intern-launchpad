@@ -60,3 +60,13 @@
 - [x] Apply the branded card system across the main resources, deployment catalog, and Operations Desk without changing external links.
 - [x] Verify logo loading, contrast, card scanning, and mobile responsiveness.
 - [x] Save and deliver the branded THE ARZENS provider-card upgrade.
+
+## GitHub-Owned Launchpad and Admin Dashboard
+
+- [x] Define the repository-backed catalog format, edit workflow, dashboard access model, and minimum GitHub App permissions.
+- [ ] Create a private THE ARZENS Launchpad repository and preserve the current source and deployment history.
+- [ ] Upgrade the project for secure administrative access and server-side GitHub integration.
+- [ ] Build a protected dashboard to add, edit, publish, and archive resource cards through tracked repository commits.
+- [ ] Create and install a private, least-privilege GitHub App for this repository after user confirmation.
+- [ ] Verify that dashboard changes create understandable repository commits and that public routes remain unaffected.
+- [ ] Save and deliver the GitHub-owned THE ARZENS Launchpad workflow.
