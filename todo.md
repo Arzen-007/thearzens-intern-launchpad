@@ -51,3 +51,12 @@
 - [x] Update the catalog model, filter labels, navigation, and section language around the requested technical categories.
 - [x] Verify desktop/mobile filter behavior, result counts, direct-link preservation, and category coverage.
 - [x] Save and deliver the reorganized THE ARZENS technical resource hub.
+
+## Branded Provider Cards
+
+- [x] Audit every provider record and define the branded logo, provider name, and free-offer display fields.
+- [x] Collect authentic provider logo assets from official sources and prepare them for reliable deployment.
+- [x] Add a reusable provider identity treatment that makes the official organization and its free offering clear at a glance.
+- [x] Apply the branded card system across the main resources, deployment catalog, and Operations Desk without changing external links.
+- [x] Verify logo loading, contrast, card scanning, and mobile responsiveness.
+- [x] Save and deliver the branded THE ARZENS provider-card upgrade.

@@ -40,6 +40,7 @@ import {
 import { expandedResources, type ExpandedCategory } from "@/data/atlasCatalog";
 import { projectStacks, shipResources, type ShipCategory, type ShipResource } from "@/data/shipFreeCatalog";
 import { operationMissions, operationsResources, pakistanProtocol, type OperationKind, type OperationMission, type OperationResource, type OperationsCategory } from "@/data/operationsCatalog";
+import { providerIdentityFor } from "@/data/providerIdentity";
 
 type CoreCategory =
   | "Servers"
@@ -541,6 +542,19 @@ function FreeType({ value }: { value: Resource["freeType"] }) {
   return <span className={className}>{value}</span>;
 }
 
+function ProviderIdentity({ resource }: { resource: Pick<Resource, "name" | "url" | "freeType"> }) {
+  const provider = providerIdentityFor(resource);
+  return (
+    <div className="provider-identity">
+      <span className="provider-identity__logo" aria-hidden="true">
+        {provider.logo ? <img src={provider.logo} alt="" loading="lazy" /> : <b>{provider.initials}</b>}
+      </span>
+      <span className="provider-identity__copy"><b>{provider.organization}</b><small>Official provider</small></span>
+      <span className="provider-identity__offer">{provider.offer}</span>
+    </div>
+  );
+}
+
 function ResourceCard({ resource, index }: { resource: Resource; index: number }) {
   const Icon = categoryIcons[resource.category];
   return (
@@ -553,6 +567,7 @@ function ResourceCard({ resource, index }: { resource: Resource; index: number }
         <FreeType value={resource.freeType} />
       </div>
       <div className="resource-card__content">
+        <ProviderIdentity resource={resource} />
         <p className="resource-card__tag">{resource.tag}</p>
         <h3>{resource.name}</h3>
         <p className="resource-card__summary">{resource.summary}</p>
@@ -585,6 +600,7 @@ function ShipResourceCard({ resource, index }: { resource: ShipResource; index: 
         <FreeType value={resource.freeType} />
       </div>
       <div className="resource-card__content">
+        <ProviderIdentity resource={resource} />
         <p className="resource-card__tag">{resource.tag}</p>
         <h3>{resource.name}</h3>
         <p className="resource-card__summary">{resource.summary}</p>
@@ -614,6 +630,7 @@ function OperationResourceCard({ resource, index, saved, onToggleSaved }: { reso
         <FreeType value={resource.freeType} />
       </div>
       <div className="operations-card__content">
+        <ProviderIdentity resource={resource} />
         <p className="operations-card__tag">{resource.tag}</p>
         <h3>{resource.name}</h3>
         <p>{resource.summary}</p>

@@ -110,3 +110,16 @@ The wordmark uses a compact custom pairing of a monospaced “F” and a directi
 - The command spine is intentionally louder than ordinary resource fields: active nodes glow cyan, a continuous cyan route line runs through the rail, and all rail nodes have visible mission-state markers.
 - Each major resource route begins with a larger lead checkpoint before its compact cards. The checkpoint explains the mission, while only the lead provider receives the brightest cyan treatment.
 - Ordinary resource cards use quiet graphite-blue technical edges. Bright cyan is reserved for active navigation, verified/primary actions, and recommended routes; security lead routes retain red, and AI/research lead routes retain purple.
+
+### Branded provider cards
+
+- Each provider card gains a compact **official-provider lockup**: the authentic provider identity icon, the organization or product name, and a small “official provider” line. THE ARZENS remains the navigation system; provider marks identify the route being opened.
+- The most prominent new line is an explicit free-offer statement, such as “Free quota from Cloudflare” or “Free credits from Amazon Web Services.” It is informational, never a marketing claim, and stays tied to the existing conservative free-tier label and caution note.
+- Provider icons appear inside a quiet graphite tile with a fixed size and `object-fit: contain`; no logo may overpower an active cyan recommendation, red CTF context, or purple AI context. If a provider identity icon is unavailable, use the service initials in the same tile so no card renders an empty image slot.
+- The free-offer statement sits above the service title, allowing interns to recognize the organization, the kind of free access, and the actual route before reading the longer operating note.
+
+### Provider-card hierarchy pass
+
+- THE ARZENS is visibly primary in the opening screen: the wordmark is treated as the intern operating-system header, while the “Intern Launchpad” label describes its purpose.
+- The command spine, route transitions, checkpoint panels, and lead routes are the page’s high-contrast orientation system. Ordinary provider cards intentionally recede into graphite-blue technical fields.
+- Provider marks stay useful but secondary: they identify the external organization and free-entry route without competing with THE ARZENS’ cyan mission logic, or the reserved red/purple security and research signals.
