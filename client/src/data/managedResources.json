@@ -1,5 +1,21 @@
 {
   "version": 1,
-  "updatedAt": null,
-  "resources": []
+  "updatedAt": "2026-08-24T22:08:12.023Z",
+  "resources": [
+    {
+      "id": "github-pages-static-hosting",
+      "name": "GitHub Pages",
+      "category": "Frontend",
+      "tag": "STATIC DEPLOY",
+      "freeType": "Always free",
+      "summary": "Publish a static project, portfolio, or documentation site from a GitHub repository with GitHub Pages.",
+      "note": "Use the official Pages documentation, verify your site settings, and keep the repository public for a public project site.",
+      "url": "https://docs.github.com/en/pages",
+      "recommendation": true,
+      "audience": "Student",
+      "level": "Build",
+      "status": "active",
+      "updatedAt": "2026-08-24T22:08:12.023Z"
+    }
+  ]
 }
