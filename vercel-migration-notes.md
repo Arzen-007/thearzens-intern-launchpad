@@ -66,15 +66,29 @@ On 25 August 2026, the prepared `user_role` enum and `users` table were applied 
 
 ## Vercel serverless loading fix
 
-The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at the Vercel function entry because Node ESM could not resolve the extensionless `server/app` import. The function entry and its runtime dependency chain now use explicit `.js` ESM import paths. The first patch exposed a second Vercel runtime constraint: TypeScript-only `@shared/*` aliases are not resolved by the Node function runtime, so active server imports now use explicit relative ESM paths too. A regression assertion protects the function entry contract; type-checking, all 19 tests, the production build, and the Vercel-mode build pass. The production retest remains pending until this fix is committed and Vercel deploys it.
+The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at the Vercel function entry because Node ESM could not resolve the extensionless `server/app` import. The function entry and its runtime dependency chain now use explicit `.js` ESM import paths. The first patch exposed a second Vercel runtime constraint: TypeScript-only `@shared/*` aliases are not resolved by the Node function runtime, so active server imports now use explicit relative ESM paths too. A regression assertion protects the function entry contract; type-checking, all 19 tests, the production build, and the Vercel-mode build pass. The patched production routes were then verified through the independent owner login.
 
 ## Legacy OAuth isolation
 
-The first independent owner-login probe also showed that loading the session SDK eagerly initialized the retained Manus OAuth client and emitted an unnecessary missing-configuration warning. The SDK now initializes that client only when a legacy Manus OAuth method is called. GitHub owner sessions use a local signed cookie and Neon persistence without Manus OAuth settings. The focused regression test, type-checking, all 20 tests, the production build, and the Vercel-mode build pass. Production deployment and authentication retesting remain pending.
+The first independent owner-login probe also showed that loading the session SDK eagerly initialized the retained Manus OAuth client and emitted an unnecessary missing-configuration warning. The SDK now initializes that client only when a legacy Manus OAuth method is called. GitHub owner sessions use a local signed cookie and Neon persistence without Manus OAuth settings. The focused regression test, type-checking, all 20 tests, the production build, and the Vercel-mode build pass. Post-deployment Vercel logs confirm the independent start route and callback complete without the legacy OAuth warning.
 
 ## Neon owner-role preservation
 
-The first successful GitHub callback created the intended owner session, but routine session refresh was writing Neon’s default `user` role back over the existing `admin` role. The Neon conflict-update path now updates `role` only when a callback explicitly supplies one; normal `lastSignedIn` refreshes preserve the existing access level. Two focused regression tests cover both cases. Type-checking, all 22 tests, the production build, and the Vercel-mode build pass. Production deployment and final owner-login retesting remain pending.
+The first successful GitHub callback created the intended owner session, but routine session refresh was writing Neon’s default `user` role back over the existing `admin` role. The Neon conflict-update path now updates `role` only when a callback explicitly supplies one; normal `lastSignedIn` refreshes preserve the existing access level. Two focused regression tests cover both cases. Type-checking, all 22 tests, the production build, and the Vercel-mode build pass. The final Vercel owner-login test reached `/admin` with admin access.
+
+## Production owner-login verification
+
+The final Vercel Production deployment became Ready on 25 August 2026. The dedicated, allow-listed GitHub owner login completed and the browser reached the protected THE ARZENS `/admin` control room, proving the signed independent session and isolated Neon persistence path work in production. No publisher operation was performed.
+
+The GitHub App publisher settings are now present as Vercel Production-only values. During the first entry attempt the existing private key appeared in a tool preview, so it was immediately revoked and replaced before use. The replacement remains a masked server-only Vercel secret and is not recorded in this repository. Manus stays active as the fallback.
+
+Vercel runtime logs for the latest deployment show the owner-login start route returning `302`, the GitHub callback returning `302`, followed by `auth.me` and the protected catalog/status queries returning `200`. The log panel reports zero current warnings, errors, and fatal events; the old Manus OAuth configuration warning is absent from this post-deployment sequence.
+
+## Publisher and Pages read-only verification
+
+After the final Vercel Production redeployment, the authenticated THE ARZENS control room reports **GitHub Publisher: Connected** and **Pages Publication: Live**. It reads one active GitHub-managed resource record and identifies it as included in the Pages bundle; the latest Pages workflow is reported live. This is a successful read-only verification only. No Vercel-originated catalog mutation, repository commit, or public Launchpad change has been made since the migration started.
+
+Vercel runtime logs independently confirm the read-only check: authenticated `catalog.status`, `catalog.list`, and `catalog.deployment` requests returned HTTP `200` after the replacement-key deployment, and the log panel showed zero warnings, errors, and fatal events.
 
 ## References
 

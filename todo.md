@@ -122,14 +122,20 @@
 - [x] Apply the existing users schema to the isolated Neon database and verify no owner data is exposed in source control or browser output.
 - [x] Create a dedicated GitHub OAuth App for the Vercel dashboard and configure its approved callback URL without altering the GitHub publishing App.
 - [x] Create an isolated THE ARZENS dashboard deployment on Vercel without changing the existing GitHub Pages public Launchpad.
-- [ ] Configure only the required Vercel environment variables through secure project settings and confirm no credentials reach GitHub or the browser.
-- [ ] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
+- [x] Configure the required Vercel environment variables through secure project settings; rotate and replace any credentials exposed during setup before production verification.
+- [x] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
 - [ ] Perform one controlled owner dashboard catalog update from Vercel only after explicit confirmation, then verify its GitHub commit and Pages publication.
 - [ ] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
 - [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
 - [x] Remove the independent GitHub session’s dependency on a Manus VITE_APP_ID and verify it with a focused test.
-- [ ] Fix the Vercel serverless ESM import-resolution failure and re-verify the protected API routes.
-- [ ] Prevent independent GitHub owner-login routes from initializing the legacy Manus OAuth client.
-- [ ] Redeploy the lazy OAuth initialization fix and verify the Vercel owner-login start route no longer initializes legacy Manus OAuth.
-- [ ] Re-test the complete independent GitHub owner-login callback after the final Vercel deployment.
+- [x] Fix the Vercel serverless ESM import-resolution failure and re-verify the protected API routes.
+- [x] Prevent independent GitHub owner-login routes from initializing the legacy Manus OAuth client.
+- [x] Redeploy the lazy OAuth initialization fix and capture Vercel runtime-log proof that the owner-login start route no longer initializes legacy Manus OAuth.
+- [x] Run one end-to-end owner login after the latest production deployment and confirm the callback reaches `/admin` with admin access.
 - [x] Preserve an existing Neon admin role when refreshing an authenticated owner session.
+- [x] Verify the dedicated GitHub owner login creates a Neon-backed admin session and renders the protected Vercel `/admin` dashboard.
+- [x] Configure the GitHub App publisher credentials in Vercel Production; revoke the exposed original key and replace it with a masked server-only key before verification.
+- [x] Verify Vercel live read-only catalog and GitHub Pages status after the publisher credentials are configured.
+- [x] Revoke the GitHub App private key exposed by the Vercel form preview and generate a replacement.
+- [x] Add only the replacement GitHub App private key to Vercel Production through a user-controlled secure paste.
+- [x] Redeploy Vercel and verify the GitHub App publisher with read-only catalog and GitHub Pages status checks.
