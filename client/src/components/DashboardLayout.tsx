@@ -66,7 +66,14 @@ export default function DashboardLayout({
     return (
       <div className="grid min-h-screen place-items-center bg-[#020407] p-6 text-cyan-50">
         <div className="w-full max-w-md border border-cyan-300/25 bg-[#071018] p-8 shadow-[0_0_60px_rgba(76,233,255,.08)]">
-          <p className="font-mono text-xs uppercase tracking-[.22em] text-cyan-300">THE ARZENS // Owner control</p>
+          <div className="flex items-center gap-3">
+            <img
+              src={`${import.meta.env.BASE_URL}brand/thearzens-blue.webp`}
+              alt="THE ARZENS"
+              className="h-12 w-12 border border-cyan-300/45 bg-black object-cover"
+            />
+            <p className="font-mono text-xs uppercase tracking-[.22em] text-cyan-300">THE ARZENS // Owner control</p>
+          </div>
           <div className="mt-6 flex flex-col gap-4">
             <h1 className="text-3xl font-semibold tracking-tight">Sign in to continue.</h1>
             <p className="max-w-sm text-sm leading-6 text-cyan-100/60">
@@ -177,6 +184,12 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
+                  <img
+                    src={`${import.meta.env.BASE_URL}brand/thearzens-blue.webp`}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-8 w-8 shrink-0 border border-cyan-300/40 bg-black object-cover"
+                  />
                   <span className="font-semibold tracking-tight truncate">
                     {title}
                   </span>

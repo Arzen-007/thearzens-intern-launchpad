@@ -56,6 +56,14 @@ a { color: inherit; text-decoration: none; }
 .pulse-dot, .hero__route-dot { display: inline-block; width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #55f1ff; box-shadow: 0 0 13px #37e6ff; animation: pulse 2s infinite ease-in-out; }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 4px #37e6ff; } }
 
+/* Supplied original THE ARZENS marks: blue is the primary system identity; red is restricted to authorized CTF/security; purple is used for AI/research. */
+.arzens-signal { display: block; object-fit: cover; object-position: center; background: #000; }
+.hero__visual > .arzens-signal { height: auto; object-fit: contain; background: transparent; }
+.brand-mark .arzens-signal { object-position: center 42%; }
+.journey-board__grid button > .arzens-signal { object-fit: cover; }
+.night-map-stamp .arzens-signal, .ctf-brand-mark .arzens-signal { object-fit: cover; }
+.ctf-zone__visual > .arzens-signal { height: auto; object-fit: contain; background: transparent; }
+
 main { position: relative; z-index: 1; min-width: 0; padding: 0 48px 52px; }.mobile-header { display: none; }
 .section-anchor { scroll-margin-top: 24px; }
 .eyebrow { margin: 0; color: #52e9ff; font: 600 10px/1.4 "IBM Plex Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; }

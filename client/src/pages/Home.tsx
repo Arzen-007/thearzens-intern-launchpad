@@ -553,12 +553,21 @@ function faviconFor(url: string) {
   }
 }
 
+const arzensLogoSources = {
+  cyan: `${import.meta.env.BASE_URL}brand/thearzens-blue.webp`,
+  red: `${import.meta.env.BASE_URL}brand/thearzens-red.webp`,
+  purple: `${import.meta.env.BASE_URL}brand/thearzens-purple.webp`,
+} as const;
+
 function ArzensMark({ tone = "cyan", label }: { tone?: "cyan" | "red" | "purple"; label?: string }) {
   return (
-    <span className={`arzens-signal arzens-signal--${tone}`} role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
-      <span className="arzens-signal__core">A</span>
-      <i /><i /><i />
-    </span>
+    <img
+      className={`arzens-signal arzens-signal--${tone}`}
+      src={arzensLogoSources[tone]}
+      alt={label ?? ""}
+      aria-hidden={label ? undefined : true}
+      decoding="async"
+    />
   );
 }
 
