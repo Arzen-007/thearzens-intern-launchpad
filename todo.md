@@ -108,3 +108,17 @@
 - [x] Create and register a blue THE ARZENS favicon for browser tabs and GitHub Pages builds.
 - [x] Verify desktop/mobile logo presentation, favicon loading, repository tracking, and live GitHub Pages publication.
 - [x] Save and deliver the restored THE ARZENS brand asset release.
+
+## THE ARZENS Secure Vercel Dashboard Migration
+
+- [x] Inspect the existing Vercel connection, current dashboard runtime dependencies, and compatibility gaps without changing the live Manus dashboard.
+- [x] Prepare a Vercel-compatible deployment configuration that keeps GitHub App credentials, owner authentication, and database access server-side.
+- [x] Explicitly preserve `/api/*` routing ahead of the Vercel SPA fallback and verify the OAuth path reaches the serverless Express handler.
+- [x] Verify a malformed `/api/trpc` request reaches the serverless tRPC handler rather than the SPA fallback, then repeat the full Vercel build validation.
+- [x] Re-run TypeScript, tests, production build, and Vercel-mode build after the API-routing verification.
+- [ ] Create an isolated THE ARZENS dashboard deployment on Vercel without changing the existing GitHub Pages public Launchpad.
+- [ ] Configure only the required Vercel environment variables through secure project settings and confirm no credentials reach GitHub or the browser.
+- [ ] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
+- [ ] Perform one controlled owner dashboard catalog update from Vercel only after explicit confirmation, then verify its GitHub commit and Pages publication.
+- [ ] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
+- [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
