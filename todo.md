@@ -126,7 +126,7 @@
 - [x] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
 - [x] Perform one controlled owner dashboard catalog update from Vercel only after explicit confirmation, then verify its GitHub commit and Pages publication.
 - [x] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
-- [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
+- [x] Save and deliver the verified THE ARZENS Vercel dashboard migration.
 - [x] Make one reversible operational-note update to the existing managed GitHub Pages record through Vercel only.
 - [x] Verify the Vercel-originated commit and the succeeding GitHub Pages workflow/public card update.
 - [x] Remove the independent GitHub session’s dependency on a Manus VITE_APP_ID and verify it with a focused test.
@@ -145,6 +145,6 @@
 - [x] Confirm no public rendering/discovery change was required because the live managed card rendered with its source label and exact Vercel operational note.
 - [x] Record the owner decision: use the Vercel dashboard as primary while retaining the Manus dashboard/backend as active fallback.
 - [x] Run final validation for the verified Vercel-primary, Manus-fallback migration state.
-- [ ] Save and deliver the Vercel-primary, Manus-fallback migration record.
+- [x] Save and deliver the Vercel-primary, Manus-fallback migration record.
 - [x] Gate the live GitHub App integration test outside Vercel Production so it does not use the stale Manus fallback credential.
 - [x] Re-run and record a fully passing `pnpm check`, `pnpm test`, `pnpm build`, and `pnpm build:vercel` validation set.
