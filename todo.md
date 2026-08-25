@@ -125,7 +125,7 @@
 - [x] Configure the required Vercel environment variables through secure project settings; rotate and replace any credentials exposed during setup before production verification.
 - [x] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
 - [x] Perform one controlled owner dashboard catalog update from Vercel only after explicit confirmation, then verify its GitHub commit and Pages publication.
-- [ ] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
+- [x] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
 - [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
 - [x] Make one reversible operational-note update to the existing managed GitHub Pages record through Vercel only.
 - [x] Verify the Vercel-originated commit and the succeeding GitHub Pages workflow/public card update.
@@ -143,3 +143,8 @@
 - [x] Redeploy Vercel and verify the GitHub App publisher with read-only catalog and GitHub Pages status checks.
 - [x] Verify in the live public GitHub Pages UI that the distinct managed GitHub Pages card displays the THE ARZENS OWNER CATALOG label and exact Vercel operational note.
 - [x] Confirm no public rendering/discovery change was required because the live managed card rendered with its source label and exact Vercel operational note.
+- [x] Record the owner decision: use the Vercel dashboard as primary while retaining the Manus dashboard/backend as active fallback.
+- [x] Run final validation for the verified Vercel-primary, Manus-fallback migration state.
+- [ ] Save and deliver the Vercel-primary, Manus-fallback migration record.
+- [x] Gate the live GitHub App integration test outside Vercel Production so it does not use the stale Manus fallback credential.
+- [x] Re-run and record a fully passing `pnpm check`, `pnpm test`, `pnpm build`, and `pnpm build:vercel` validation set.

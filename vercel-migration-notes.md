@@ -96,6 +96,14 @@ On 25 August 2026, the owner approved one reversible Vercel-only test change. Fr
 
 The resulting GitHub Pages workflow run `32856440450` completed successfully against that exact commit and deployed to the existing public Launchpad URL.[4] A live, cache-busting browser-DOM verification found both the `THE ARZENS OWNER CATALOG` source label and the exact approved note on the public page. A pre-existing static GitHub Pages card remains intentionally separate; the dashboard-managed record is appended as the clearly labelled owner-catalog card, preserving the public core catalog while making owner changes traceable. No rendering or discovery code change was required.
 
+## Owner operating decision
+
+The owner selected the Vercel deployment as the primary THE ARZENS owner dashboard for normal use. The Manus deployment remains active and unchanged as a deliberate fallback backend/dashboard. No Manus service has been paused, removed, or redirected, and no additional catalog mutation was authorised or performed after the controlled note-only verification.
+
+## Final source validation
+
+The final `pnpm check`, `pnpm test`, `pnpm build`, and `pnpm build:vercel` validation set completed successfully. The test suite reports 21 passing tests and one deliberately skipped live GitHub App credential check. That integration check now runs only when `VITEST_GITHUB_APP_INTEGRATION=1` is explicitly supplied in an approved environment with the current server-only credential; it no longer attempts to use the sandbox’s stale Manus fallback credential. The Vercel Production publisher remains separately verified through authenticated read-only requests using its masked replacement key. The builds retain only the pre-existing client bundle-size advisory.
+
 ## References
 
 [1]: https://vercel.com/docs/frameworks/backend/express "Vercel: Express"
