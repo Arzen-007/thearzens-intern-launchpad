@@ -72,6 +72,10 @@ The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at
 
 The first independent owner-login probe also showed that loading the session SDK eagerly initialized the retained Manus OAuth client and emitted an unnecessary missing-configuration warning. The SDK now initializes that client only when a legacy Manus OAuth method is called. GitHub owner sessions use a local signed cookie and Neon persistence without Manus OAuth settings. The focused regression test, type-checking, all 20 tests, the production build, and the Vercel-mode build pass. Production deployment and authentication retesting remain pending.
 
+## Neon owner-role preservation
+
+The first successful GitHub callback created the intended owner session, but routine session refresh was writing Neon’s default `user` role back over the existing `admin` role. The Neon conflict-update path now updates `role` only when a callback explicitly supplies one; normal `lastSignedIn` refreshes preserve the existing access level. Two focused regression tests cover both cases. Type-checking, all 22 tests, the production build, and the Vercel-mode build pass. Production deployment and final owner-login retesting remain pending.
+
 ## References
 
 [1]: https://vercel.com/docs/frameworks/backend/express "Vercel: Express"

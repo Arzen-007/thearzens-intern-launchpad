@@ -14,6 +14,37 @@ let neonDb: NeonDb | null = null;
 
 export type DatabaseProvider = "mysql" | "neon";
 
+export function neonUserUpdateSet(values: {
+  name: string | null;
+  email: string | null;
+  loginMethod: string | null;
+  role?: "user" | "admin";
+  lastSignedIn: Date;
+}) {
+  const updateSet: {
+    name: string | null;
+    email: string | null;
+    loginMethod: string | null;
+    lastSignedIn: Date;
+    updatedAt: Date;
+    role?: "user" | "admin";
+  } = {
+    name: values.name,
+    email: values.email,
+    loginMethod: values.loginMethod,
+    lastSignedIn: values.lastSignedIn,
+    updatedAt: new Date(),
+  };
+
+  // A refresh supplies only openId/lastSignedIn. Do not overwrite a previously
+  // granted owner role with the insert default of "user" on Neon conflicts.
+  if (values.role !== undefined) {
+    updateSet.role = values.role;
+  }
+
+  return updateSet;
+}
+
 /**
  * Vercel sets DATABASE_PROVIDER=neon. The URL check is a safe fallback for
  * deployments where the provider flag has not yet been configured.
@@ -113,14 +144,13 @@ export async function upsertUser(user: InsertUser): Promise<void> {
         .values(neonValues)
         .onConflictDoUpdate({
           target: postgresUsers.openId,
-          set: {
+          set: neonUserUpdateSet({
             name: neonValues.name,
             email: neonValues.email,
             loginMethod: neonValues.loginMethod,
-            role: neonValues.role,
+            role: values.role,
             lastSignedIn: neonValues.lastSignedIn,
-            updatedAt: new Date(),
-          },
+          }),
         });
       return;
     }
