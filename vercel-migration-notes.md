@@ -90,7 +90,15 @@ After the final Vercel Production redeployment, the authenticated THE ARZENS con
 
 Vercel runtime logs independently confirm the read-only check: authenticated `catalog.status`, `catalog.list`, and `catalog.deployment` requests returned HTTP `200` after the replacement-key deployment, and the log panel showed zero warnings, errors, and fatal events.
 
+## Controlled publication verification
+
+On 25 August 2026, the owner approved one reversible Vercel-only test change. From the authenticated Vercel THE ARZENS owner control room, the existing managed `github-pages-static-hosting` record had only its Pakistan / operational note updated to: “Vercel owner control check — managed record verified after independent dashboard migration.” The dashboard returned a successful GitHub commit receipt for `5e2d811d08f8aeb1fbb00bbe428b10d50b63d242`; read-only commit metadata confirms the sole modified file was `client/src/data/managedResources.json` and the commit message was `catalog: update GitHub Pages`.[3]
+
+The resulting GitHub Pages workflow run `32856440450` completed successfully against that exact commit and deployed to the existing public Launchpad URL.[4] The live production bundle contains the approved note and the `THE ARZENS OWNER CATALOG` card-source label. A pre-existing static GitHub Pages card remains intentionally separate; the dashboard-managed record is appended as the clearly labelled owner-catalog card, preserving the public core catalog while making owner changes traceable. A final live visual inspection of that appended card remains tracked separately because the browser inspection timed out while searching the exceptionally long public page.
+
 ## References
 
 [1]: https://vercel.com/docs/frameworks/backend/express "Vercel: Express"
 [2]: https://vercel.com/docs/frameworks/frontend/vite "Vercel: Vite"
+[3]: https://github.com/Arzen-007/thearzens-intern-launchpad/commit/5e2d811d08f8aeb1fbb00bbe428b10d50b63d242 "GitHub commit 5e2d811"
+[4]: https://github.com/Arzen-007/thearzens-intern-launchpad/actions/runs/32856440450 "GitHub Pages workflow run 32856440450"

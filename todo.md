@@ -124,9 +124,11 @@
 - [x] Create an isolated THE ARZENS dashboard deployment on Vercel without changing the existing GitHub Pages public Launchpad.
 - [x] Configure the required Vercel environment variables through secure project settings; rotate and replace any credentials exposed during setup before production verification.
 - [x] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
-- [ ] Perform one controlled owner dashboard catalog update from Vercel only after explicit confirmation, then verify its GitHub commit and Pages publication.
+- [x] Perform one controlled owner dashboard catalog update from Vercel only after explicit confirmation, then verify its GitHub commit and Pages publication.
 - [ ] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
 - [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
+- [x] Make one reversible operational-note update to the existing managed GitHub Pages record through Vercel only.
+- [ ] Verify the Vercel-originated commit and the succeeding GitHub Pages workflow/public card update.
 - [x] Remove the independent GitHub session’s dependency on a Manus VITE_APP_ID and verify it with a focused test.
 - [x] Fix the Vercel serverless ESM import-resolution failure and re-verify the protected API routes.
 - [x] Prevent independent GitHub owner-login routes from initializing the legacy Manus OAuth client.
@@ -139,3 +141,5 @@
 - [x] Revoke the GitHub App private key exposed by the Vercel form preview and generate a replacement.
 - [x] Add only the replacement GitHub App private key to Vercel Production through a user-controlled secure paste.
 - [x] Redeploy Vercel and verify the GitHub App publisher with read-only catalog and GitHub Pages status checks.
+- [ ] Verify in the live public GitHub Pages UI that the distinct managed GitHub Pages card displays the THE ARZENS OWNER CATALOG label and exact Vercel operational note.
+- [ ] If that deployed managed card is not discoverable, fix only its public rendering/discovery path and re-verify it visually before cutover.
