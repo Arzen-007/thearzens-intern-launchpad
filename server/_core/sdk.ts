@@ -94,13 +94,25 @@ const createOAuthHttpClient = (): AxiosInstance =>
     timeout: AXIOS_TIMEOUT_MS,
   });
 
-class SDKServer {
+export class SDKServer {
   private readonly client: AxiosInstance;
-  private readonly oauthService: OAuthService;
+  private oauthService?: OAuthService;
 
   constructor(client: AxiosInstance = createOAuthHttpClient()) {
     this.client = client;
-    this.oauthService = new OAuthService(this.client);
+  }
+
+  /**
+   * The Manus OAuth client is intentionally initialized only by the legacy
+   * Manus OAuth methods. Standalone GitHub owner sessions use locally signed
+   * cookies and Neon persistence, so loading the Vercel function must not
+   * require Manus OAuth settings.
+   */
+  private getOAuthService(): OAuthService {
+    if (!this.oauthService) {
+      this.oauthService = new OAuthService(this.client);
+    }
+    return this.oauthService;
   }
 
   private deriveLoginMethod(
@@ -134,7 +146,7 @@ class SDKServer {
     code: string,
     state: string
   ): Promise<ExchangeTokenResponse> {
-    return this.oauthService.getTokenByCode(code, state);
+    return this.getOAuthService().getTokenByCode(code, state);
   }
 
   /**
@@ -143,7 +155,7 @@ class SDKServer {
    * const userInfo = await sdk.getUserInfo(tokenResponse.accessToken);
    */
   async getUserInfo(accessToken: string): Promise<GetUserInfoResponse> {
-    const data = await this.oauthService.getUserInfoByToken({
+    const data = await this.getOAuthService().getUserInfoByToken({
       accessToken,
     } as ExchangeTokenResponse);
     const loginMethod = this.deriveLoginMethod(

@@ -68,6 +68,10 @@ On 25 August 2026, the prepared `user_role` enum and `users` table were applied 
 
 The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at the Vercel function entry because Node ESM could not resolve the extensionless `server/app` import. The function entry and its runtime dependency chain now use explicit `.js` ESM import paths. The first patch exposed a second Vercel runtime constraint: TypeScript-only `@shared/*` aliases are not resolved by the Node function runtime, so active server imports now use explicit relative ESM paths too. A regression assertion protects the function entry contract; type-checking, all 19 tests, the production build, and the Vercel-mode build pass. The production retest remains pending until this fix is committed and Vercel deploys it.
 
+## Legacy OAuth isolation
+
+The first independent owner-login probe also showed that loading the session SDK eagerly initialized the retained Manus OAuth client and emitted an unnecessary missing-configuration warning. The SDK now initializes that client only when a legacy Manus OAuth method is called. GitHub owner sessions use a local signed cookie and Neon persistence without Manus OAuth settings. The focused regression test, type-checking, all 20 tests, the production build, and the Vercel-mode build pass. Production deployment and authentication retesting remain pending.
+
 ## References
 
 [1]: https://vercel.com/docs/frameworks/backend/express "Vercel: Express"

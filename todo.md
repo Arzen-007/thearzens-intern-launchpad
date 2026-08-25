@@ -129,3 +129,6 @@
 - [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
 - [x] Remove the independent GitHub session’s dependency on a Manus VITE_APP_ID and verify it with a focused test.
 - [ ] Fix the Vercel serverless ESM import-resolution failure and re-verify the protected API routes.
+- [ ] Prevent independent GitHub owner-login routes from initializing the legacy Manus OAuth client.
+- [ ] Redeploy the lazy OAuth initialization fix and verify the Vercel owner-login start route no longer initializes legacy Manus OAuth.
+- [ ] Re-test the complete independent GitHub owner-login callback after the final Vercel deployment.
