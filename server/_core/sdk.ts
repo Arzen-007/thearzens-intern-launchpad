@@ -24,6 +24,19 @@ export type SessionPayload = {
   name: string;
 };
 
+/** Stable non-secret session audience for the standalone THE ARZENS GitHub owner login. */
+export const GITHUB_OWNER_SESSION_APP_ID = "thearzens-github-owner-dashboard";
+
+export function resolveSessionAppId(
+  openId: string,
+  configuredAppId: string,
+  explicitAppId?: string
+): string {
+  if (explicitAppId) return explicitAppId;
+  if (openId.startsWith("github:")) return GITHUB_OWNER_SESSION_APP_ID;
+  return configuredAppId;
+}
+
 const EXCHANGE_TOKEN_PATH = `/webdev.v1.WebDevAuthPublicService/ExchangeToken`;
 const GET_USER_INFO_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserInfo`;
 const GET_USER_INFO_WITH_JWT_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserInfoWithJwt`;
@@ -165,12 +178,17 @@ class SDKServer {
    */
   async createSessionToken(
     openId: string,
-    options: { expiresInMs?: number; name?: string } = {}
+    options: { expiresInMs?: number; name?: string; appId?: string } = {}
   ): Promise<string> {
+    const appId = resolveSessionAppId(openId, ENV.appId, options.appId);
+    if (!appId) {
+      throw new Error("Session app ID is not configured");
+    }
+
     return this.signSession(
       {
         openId,
-        appId: ENV.appId,
+        appId,
         name: options.name || "",
       },
       options

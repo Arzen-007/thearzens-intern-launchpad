@@ -10,7 +10,7 @@ import type { Express, Request, Response } from "express";
 import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { ENV } from "./env";
-import { sdk } from "./sdk";
+import { GITHUB_OWNER_SESSION_APP_ID, sdk } from "./sdk";
 
 function getQueryParam(req: Request, key: string): string | undefined {
   const value = req.query[key];
@@ -146,6 +146,7 @@ export function registerOAuthRoutes(app: Express) {
       const sessionToken = await sdk.createSessionToken(openId, {
         name: githubUser.name ?? githubUser.login,
         expiresInMs: ONE_YEAR_MS,
+        appId: GITHUB_OWNER_SESSION_APP_ID,
       });
       res.cookie(COOKIE_NAME, sessionToken, {
         ...cookieOptions,

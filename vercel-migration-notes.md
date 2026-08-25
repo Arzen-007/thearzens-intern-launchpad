@@ -16,12 +16,11 @@ The Vercel project must receive these values through **Vercel Project Settings**
 
 | Category | Required variable names |
 |---|---|
-| Session and owner access | `JWT_SECRET`, `OWNER_OPEN_ID`, `OWNER_NAME` |
+| Session and owner access | `JWT_SECRET`, `GITHUB_OAUTH_CLIENT_ID`, `GITHUB_OAUTH_CLIENT_SECRET`, `GITHUB_OAUTH_ALLOWED_LOGIN` |
 | Database | `DATABASE_URL` |
-| Manus OAuth compatibility | `VITE_APP_ID`, `OAUTH_SERVER_URL`, `VITE_OAUTH_PORTAL_URL` |
 | GitHub catalog publisher | `GITHUB_APP_ID`, `GITHUB_APP_INSTALLATION_ID`, `GITHUB_APP_PRIVATE_KEY` |
 
-`GITHUB_APP_PRIVATE_KEY` is server-only. It must never be committed, printed, or prefixed with `VITE_`.
+`GITHUB_OAUTH_CLIENT_SECRET`, `JWT_SECRET`, `DATABASE_URL`, and `GITHUB_APP_PRIVATE_KEY` are server-only. They must never be committed, printed, or prefixed with `VITE_`. The standalone GitHub owner-login does not require Manus OAuth values or `VITE_APP_ID`.
 
 The existing Manus dashboard stays active until a Vercel deployment passes owner authentication, repository catalog access, and a controlled publication check. The public GitHub Pages Launchpad remains unchanged throughout this migration.
 
@@ -39,6 +38,12 @@ The owner browser's Vercel **New Project** screen now lists `thearzens-intern-la
 
 The manual import configuration now confirms the `Arzens` Hobby team, source repository `Arzen-007/thearzens-intern-launchpad` on `main`, Vite application preset, and project-root directory (`./`). Before the Create Project action, use the Vercel project name `thearzens-owner-dashboard` and add required environment values through Vercel's secure Environment Variables panel only.
 
+The Vercel project has since been created as `thearzens-owner-dashboard` and is linked to `Arzen-007/thearzens-intern-launchpad` on `main`. Its generated production URL is `https://thearzens-owner-dashboard.vercel.app`. The first project deployment used `pnpm install --frozen-lockfile`, `pnpm build:vercel`, and `dist/public` without changing the public GitHub Pages Launchpad or the Manus fallback.
+
+GitHub Developer Settings confirms that the owner account currently has no OAuth Apps. The dedicated dashboard-only OAuth App must use the Vercel URL above and the exact callback URL `https://thearzens-owner-dashboard.vercel.app/api/oauth/github/callback`. It must stay separate from the repository publishing GitHub App.
+
+On 25 August 2026, the dedicated `THE ARZENS Owner Dashboard` GitHub OAuth App was created with the required Vercel homepage and callback URL. Wildcard redirect matching and Device Flow remain disabled. Its client secret was rotated after an exposure event and the obsolete secret was revoked; the current value is present only as a masked Vercel Production secret and is not recorded here.
+
 ## Neon connection status
 
 The Neon connector is shown as enabled in account configuration, but the session's Neon MCP endpoint repeatedly reports `server not found` after a connection refresh. The migration must not create, query, or change any database until the Neon service is discoverable in this session. The existing Manus database has not been accessed or modified.
@@ -48,6 +53,12 @@ Browser verification on 25 August 2026 confirms the owner is authenticated in th
 ## Isolated database provisioned
 
 On 25 August 2026, a new Neon project named `thearzens-owner-dashboard` was created through the authenticated owner browser. It is separate from the existing Manus database and uses the Neon Free plan, PostgreSQL 18, the default `production` branch, and AWS Asia Pacific 1 (Singapore). Neon Auth remains disabled because the dashboard is planned to use a dedicated GitHub OAuth owner-login flow. The Neon connection string has not been copied into this document, the repository, or chat.
+
+The isolated Vercel project is `thearzens-owner-dashboard` in the `Arzens` team. Its Production-only private `DATABASE_URL` points to this newly created, isolated Neon project. The database role password and Vercel connection value were rotated after an exposure event, followed by a successful Vercel Production redeployment. The non-secret Production configuration values `VITE_AUTH_PROVIDER=github` and `DATABASE_PROVIDER=neon` are present. No database connection value, OAuth credential, GitHub App credential, or session secret is recorded in this repository.
+
+## Independent session validation
+
+The dedicated GitHub owner-login now signs its sessions with a stable, non-secret dashboard audience, rather than requiring Manus `VITE_APP_ID`. The retained Manus fallback still uses its own configuration. Type-checking, 19 tests, the production build, and the Vercel-mode build passed after this change.
 
 ## References
 
