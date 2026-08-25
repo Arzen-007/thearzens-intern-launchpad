@@ -66,7 +66,7 @@ On 25 August 2026, the prepared `user_role` enum and `users` table were applied 
 
 ## Vercel serverless loading fix
 
-The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at the Vercel function entry because Node ESM could not resolve the extensionless `server/app` import. The function entry and its runtime dependency chain now use explicit `.js` ESM import paths. A regression assertion protects the function entry contract; type-checking, all 19 tests, the production build, and the Vercel-mode build pass. The production retest remains pending until this fix is committed and Vercel deploys it.
+The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at the Vercel function entry because Node ESM could not resolve the extensionless `server/app` import. The function entry and its runtime dependency chain now use explicit `.js` ESM import paths. The first patch exposed a second Vercel runtime constraint: TypeScript-only `@shared/*` aliases are not resolved by the Node function runtime, so active server imports now use explicit relative ESM paths too. A regression assertion protects the function entry contract; type-checking, all 19 tests, the production build, and the Vercel-mode build pass. The production retest remains pending until this fix is committed and Vercel deploys it.
 
 ## References
 

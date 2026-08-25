@@ -10,7 +10,7 @@ import {
   managedCatalogSchema,
   type ManagedCatalog,
   type ManagedResourceInput,
-} from "@shared/catalog";
+} from "../shared/catalog.js";
 import { ENV } from "./_core/env.js";
 
 type GitHubAppConfig = {

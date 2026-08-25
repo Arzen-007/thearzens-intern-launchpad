@@ -1,5 +1,5 @@
-import { COOKIE_NAME } from "@shared/const";
-import { managedResourceInputSchema } from "@shared/catalog";
+import { COOKIE_NAME } from "../shared/const.js";
+import { managedResourceInputSchema } from "../shared/catalog.js";
 import { z } from "zod";
 import { getSessionCookieOptions } from "./_core/cookies.js";
 import { systemRouter } from "./_core/systemRouter.js";
