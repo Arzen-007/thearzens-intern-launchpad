@@ -119,7 +119,7 @@
 - [x] Inspect the connected Neon account and create or select an isolated database for the Vercel-hosted THE ARZENS dashboard without touching the Manus database.
 - [x] Replace the MySQL-specific dashboard data adapter and user schema with a Neon PostgreSQL-compatible implementation while preserving the existing Manus fallback behavior.
 - [x] Add PostgreSQL database tests and run the full TypeScript, test, production-build, and Vercel-build validation after the adapter migration.
-- [ ] Apply the existing users schema to the isolated Neon database and verify no owner data is exposed in source control or browser output.
+- [x] Apply the existing users schema to the isolated Neon database and verify no owner data is exposed in source control or browser output.
 - [x] Create a dedicated GitHub OAuth App for the Vercel dashboard and configure its approved callback URL without altering the GitHub publishing App.
 - [x] Create an isolated THE ARZENS dashboard deployment on Vercel without changing the existing GitHub Pages public Launchpad.
 - [ ] Configure only the required Vercel environment variables through secure project settings and confirm no credentials reach GitHub or the browser.
@@ -128,3 +128,4 @@
 - [ ] Compare the verified Vercel dashboard with the Manus dashboard and document a safe cutover or rollback decision before ending Manus hosting.
 - [ ] Save and deliver the verified THE ARZENS Vercel dashboard migration.
 - [x] Remove the independent GitHub session’s dependency on a Manus VITE_APP_ID and verify it with a focused test.
+- [ ] Fix the Vercel serverless ESM import-resolution failure and re-verify the protected API routes.

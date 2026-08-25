@@ -60,6 +60,14 @@ The isolated Vercel project is `thearzens-owner-dashboard` in the `Arzens` team.
 
 The dedicated GitHub owner-login now signs its sessions with a stable, non-secret dashboard audience, rather than requiring Manus `VITE_APP_ID`. The retained Manus fallback still uses its own configuration. Type-checking, 19 tests, the production build, and the Vercel-mode build passed after this change.
 
+## Neon schema verification
+
+On 25 August 2026, the prepared `user_role` enum and `users` table were applied through the SQL Editor of the isolated Neon `production` branch. A read-only metadata query returned `true` for both the `users` table and `user_role` enum. The check did not read, write, or disclose any owner rows or connection information.
+
+## Vercel serverless loading fix
+
+The first production owner-login probe showed an `ERR_MODULE_NOT_FOUND` error at the Vercel function entry because Node ESM could not resolve the extensionless `server/app` import. The function entry and its runtime dependency chain now use explicit `.js` ESM import paths. A regression assertion protects the function entry contract; type-checking, all 19 tests, the production build, and the Vercel-mode build pass. The production retest remains pending until this fix is committed and Vercel deploys it.
+
 ## References
 
 [1]: https://vercel.com/docs/frameworks/backend/express "Vercel: Express"

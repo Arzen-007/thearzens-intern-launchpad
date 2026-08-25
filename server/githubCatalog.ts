@@ -11,7 +11,7 @@ import {
   type ManagedCatalog,
   type ManagedResourceInput,
 } from "@shared/catalog";
-import { ENV } from "./_core/env";
+import { ENV } from "./_core/env.js";
 
 type GitHubAppConfig = {
   appId: string;

@@ -7,10 +7,10 @@ import {
 } from "@shared/const";
 import { parse as parseCookieHeader } from "cookie";
 import type { Express, Request, Response } from "express";
-import * as db from "../db";
-import { getSessionCookieOptions } from "./cookies";
-import { ENV } from "./env";
-import { GITHUB_OWNER_SESSION_APP_ID, sdk } from "./sdk";
+import * as db from "../db.js";
+import { getSessionCookieOptions } from "./cookies.js";
+import { ENV } from "./env.js";
+import { GITHUB_OWNER_SESSION_APP_ID, sdk } from "./sdk.js";
 
 function getQueryParam(req: Request, key: string): string | undefined {
   const value = req.query[key];

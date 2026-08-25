@@ -2,9 +2,9 @@ import { neon } from "@neondatabase/serverless";
 import { eq } from "drizzle-orm";
 import { drizzle as drizzleMysql } from "drizzle-orm/mysql2";
 import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
-import { InsertUser, users } from "../drizzle/schema";
-import { postgresUsers } from "../drizzle/schema.postgres";
-import { ENV } from "./_core/env";
+import { InsertUser, users } from "../drizzle/schema.js";
+import { postgresUsers } from "../drizzle/schema.postgres.js";
+import { ENV } from "./_core/env.js";
 
 type MysqlDb = ReturnType<typeof drizzleMysql>;
 type NeonDb = ReturnType<typeof drizzleNeon>;

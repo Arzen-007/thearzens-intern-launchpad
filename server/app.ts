@@ -1,9 +1,9 @@
 import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerOAuthRoutes } from "./_core/oauth";
-import { registerStorageProxy } from "./_core/storageProxy";
-import { createContext } from "./_core/context";
-import { appRouter } from "./routers";
+import { registerOAuthRoutes } from "./_core/oauth.js";
+import { registerStorageProxy } from "./_core/storageProxy.js";
+import { createContext } from "./_core/context.js";
+import { appRouter } from "./routers.js";
 
 /**
  * Builds the server-only THE ARZENS API application without opening a port.

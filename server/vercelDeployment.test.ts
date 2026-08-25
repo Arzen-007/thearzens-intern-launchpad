@@ -34,6 +34,9 @@ describe("THE ARZENS Vercel deployment configuration", () => {
     expect(
       fs.existsSync(path.join(projectRoot, "api", "[...path].ts"))
     ).toBe(true);
+    expect(
+      fs.readFileSync(path.join(projectRoot, "api", "[...path].ts"), "utf8")
+    ).toContain('from "../server/app.js"');
   });
 
   it("routes the OAuth callback through Express instead of the SPA", async () => {

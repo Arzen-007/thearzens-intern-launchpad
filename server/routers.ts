@@ -1,10 +1,10 @@
 import { COOKIE_NAME } from "@shared/const";
 import { managedResourceInputSchema } from "@shared/catalog";
 import { z } from "zod";
-import { getSessionCookieOptions } from "./_core/cookies";
-import { systemRouter } from "./_core/systemRouter";
-import { adminProcedure, publicProcedure, router } from "./_core/trpc";
-import { archiveManagedCatalogResource, githubAppReadiness, githubPagesDeploymentStatus, listGitHubManagedCatalog, upsertManagedCatalogResource } from "./githubCatalog";
+import { getSessionCookieOptions } from "./_core/cookies.js";
+import { systemRouter } from "./_core/systemRouter.js";
+import { adminProcedure, publicProcedure, router } from "./_core/trpc.js";
+import { archiveManagedCatalogResource, githubAppReadiness, githubPagesDeploymentStatus, listGitHubManagedCatalog, upsertManagedCatalogResource } from "./githubCatalog.js";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
