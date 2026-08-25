@@ -10,4 +10,7 @@ export const ENV = {
   githubAppId: process.env.GITHUB_APP_ID ?? "",
   githubAppInstallationId: process.env.GITHUB_APP_INSTALLATION_ID ?? "",
   githubAppPrivateKey: process.env.GITHUB_APP_PRIVATE_KEY ?? "",
+  githubOAuthClientId: process.env.GITHUB_OAUTH_CLIENT_ID ?? "",
+  githubOAuthClientSecret: process.env.GITHUB_OAUTH_CLIENT_SECRET ?? "",
+  githubOAuthAllowedLogin: process.env.GITHUB_OAUTH_ALLOWED_LOGIN ?? "",
 };

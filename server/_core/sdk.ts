@@ -289,7 +289,13 @@ class SDKServer {
     const signedInAt = new Date();
     let user = await db.getUserByOpenId(sessionUserId);
 
-    // If user not in DB, sync from OAuth server automatically
+    // Independent Vercel GitHub sessions are created during the callback and
+    // must never be sent to the Manus OAuth service for a user lookup.
+    if (!user && session.openId.startsWith("github:")) {
+      throw ForbiddenError("GitHub owner session is not available in the database");
+    }
+
+    // If user not in DB, sync from OAuth server automatically.
     if (!user) {
       try {
         const userInfo = await this.getUserInfoWithJwt(sessionToken ?? "");

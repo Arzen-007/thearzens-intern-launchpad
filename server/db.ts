@@ -1,21 +1,55 @@
+import { neon } from "@neondatabase/serverless";
 import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle as drizzleMysql } from "drizzle-orm/mysql2";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { InsertUser, users } from "../drizzle/schema";
-import { ENV } from './_core/env';
+import { postgresUsers } from "../drizzle/schema.postgres";
+import { ENV } from "./_core/env";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+type MysqlDb = ReturnType<typeof drizzleMysql>;
+type NeonDb = ReturnType<typeof drizzleNeon>;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
-export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
-    try {
-      _db = drizzle(process.env.DATABASE_URL);
-    } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
-      _db = null;
-    }
+let mysqlDb: MysqlDb | null = null;
+let neonDb: NeonDb | null = null;
+
+export type DatabaseProvider = "mysql" | "neon";
+
+/**
+ * Vercel sets DATABASE_PROVIDER=neon. The URL check is a safe fallback for
+ * deployments where the provider flag has not yet been configured.
+ */
+export function databaseProviderFromUrl(
+  databaseUrl = process.env.DATABASE_URL,
+  configuredProvider = process.env.DATABASE_PROVIDER
+): DatabaseProvider {
+  if (configuredProvider === "neon" || databaseUrl?.includes("neon.tech")) {
+    return "neon";
   }
-  return _db;
+
+  return "mysql";
+}
+
+// Lazily create a database client so local tooling can run without credentials.
+export async function getDb() {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) return null;
+
+  try {
+    if (databaseProviderFromUrl(databaseUrl) === "neon") {
+      if (!neonDb) {
+        neonDb = drizzleNeon(neon(databaseUrl));
+      }
+      return neonDb;
+    }
+
+    if (!mysqlDb) {
+      mysqlDb = drizzleMysql(databaseUrl);
+    }
+    return mysqlDb;
+  } catch (error) {
+    console.warn("[Database] Failed to connect:", error);
+    return null;
+  }
 }
 
 export async function upsertUser(user: InsertUser): Promise<void> {
@@ -30,11 +64,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   }
 
   try {
-    const values: InsertUser = {
-      openId: user.openId,
-    };
+    const values: InsertUser = { openId: user.openId };
     const updateSet: Record<string, unknown> = {};
-
     const textFields = ["name", "email", "loginMethod"] as const;
     type TextField = (typeof textFields)[number];
 
@@ -56,19 +87,45 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.role = user.role;
       updateSet.role = user.role;
     } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
+      values.role = "admin";
+      updateSet.role = "admin";
     }
 
     if (!values.lastSignedIn) {
       values.lastSignedIn = new Date();
     }
-
     if (Object.keys(updateSet).length === 0) {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
+    if (databaseProviderFromUrl() === "neon") {
+      const neonValues = {
+        openId: values.openId,
+        name: values.name ?? null,
+        email: values.email ?? null,
+        loginMethod: values.loginMethod ?? null,
+        role: values.role ?? "user",
+        lastSignedIn: values.lastSignedIn,
+      };
+
+      await (db as NeonDb)
+        .insert(postgresUsers)
+        .values(neonValues)
+        .onConflictDoUpdate({
+          target: postgresUsers.openId,
+          set: {
+            name: neonValues.name,
+            email: neonValues.email,
+            loginMethod: neonValues.loginMethod,
+            role: neonValues.role,
+            lastSignedIn: neonValues.lastSignedIn,
+            updatedAt: new Date(),
+          },
+        });
+      return;
+    }
+
+    await (db as MysqlDb).insert(users).values(values).onDuplicateKeyUpdate({
       set: updateSet,
     });
   } catch (error) {
@@ -84,9 +141,31 @@ export async function getUserByOpenId(openId: string) {
     return undefined;
   }
 
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+  if (databaseProviderFromUrl() === "neon") {
+    const result = await (db as NeonDb)
+      .select({
+        id: postgresUsers.id,
+        openId: postgresUsers.openId,
+        name: postgresUsers.name,
+        email: postgresUsers.email,
+        loginMethod: postgresUsers.loginMethod,
+        role: postgresUsers.role,
+        createdAt: postgresUsers.createdAt,
+        updatedAt: postgresUsers.updatedAt,
+        lastSignedIn: postgresUsers.lastSignedIn,
+      })
+      .from(postgresUsers)
+      .where(eq(postgresUsers.openId, openId))
+      .limit(1);
+
+    return result.length > 0 ? result[0] : undefined;
+  }
+
+  const result = await (db as MysqlDb)
+    .select()
+    .from(users)
+    .where(eq(users.openId, openId))
+    .limit(1);
 
   return result.length > 0 ? result[0] : undefined;
 }
-
-// TODO: add feature queries here as your schema grows.

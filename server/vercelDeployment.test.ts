@@ -62,6 +62,32 @@ describe("THE ARZENS Vercel deployment configuration", () => {
     }
   });
 
+  it("keeps the GitHub owner-login route in Express and fails closed before configuration", async () => {
+    const app = createApp();
+    const server = createServer(app);
+
+    await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    if (!address || typeof address === "string") {
+      throw new Error("Test server did not bind to a local port");
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:${address.port}/api/oauth/github/start`
+      );
+
+      expect(response.status).toBe(503);
+      await expect(response.json()).resolves.toEqual({
+        error: "GitHub OAuth is not configured",
+      });
+    } finally {
+      await new Promise<void>((resolve, reject) =>
+        server.close(error => (error ? reject(error) : resolve()))
+      );
+    }
+  });
+
   it("routes a malformed tRPC request through the API instead of the SPA", async () => {
     const app = createApp();
     const server = createServer(app);

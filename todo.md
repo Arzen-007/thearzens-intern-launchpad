@@ -116,6 +116,11 @@
 - [x] Explicitly preserve `/api/*` routing ahead of the Vercel SPA fallback and verify the OAuth path reaches the serverless Express handler.
 - [x] Verify a malformed `/api/trpc` request reaches the serverless tRPC handler rather than the SPA fallback, then repeat the full Vercel build validation.
 - [x] Re-run TypeScript, tests, production build, and Vercel-mode build after the API-routing verification.
+- [x] Inspect the connected Neon account and create or select an isolated database for the Vercel-hosted THE ARZENS dashboard without touching the Manus database.
+- [x] Replace the MySQL-specific dashboard data adapter and user schema with a Neon PostgreSQL-compatible implementation while preserving the existing Manus fallback behavior.
+- [x] Add PostgreSQL database tests and run the full TypeScript, test, production-build, and Vercel-build validation after the adapter migration.
+- [ ] Apply the existing users schema to the isolated Neon database and verify no owner data is exposed in source control or browser output.
+- [ ] Create a dedicated GitHub OAuth App for the Vercel dashboard and configure its approved callback URL without altering the GitHub publishing App.
 - [ ] Create an isolated THE ARZENS dashboard deployment on Vercel without changing the existing GitHub Pages public Launchpad.
 - [ ] Configure only the required Vercel environment variables through secure project settings and confirm no credentials reach GitHub or the browser.
 - [ ] Verify the Vercel dashboard can authenticate the owner, read the repository catalog, and report the GitHub Pages deployment status.
